@@ -21,6 +21,8 @@ import pe.pisacoma.iglesia.feature.egw.EgwCatalogScreen
 import pe.pisacoma.iglesia.feature.escuela.LessonScreen
 import pe.pisacoma.iglesia.feature.escuela.QuarterScreen
 import pe.pisacoma.iglesia.feature.himnario.HymnScreen
+import pe.pisacoma.iglesia.feature.quiz.QuizIndexScreen
+import pe.pisacoma.iglesia.feature.quiz.QuizScreen
 import pe.pisacoma.iglesia.feature.himnario.HymnalIndexScreen
 import pe.pisacoma.iglesia.ui.chrome.SiteScaffold
 import pe.pisacoma.iglesia.ui.theme.LocalChrome
@@ -100,6 +102,8 @@ fun ScreenFor(route: Route, modifier: Modifier, go: (Route) -> Unit) {
         is Route.Biblia -> BibleScreen(route.book, route.chapter, route.verse, modifier, go)
         is Route.Egw -> EgwCatalogScreen(modifier, go)
         is Route.EgwBook -> EgwBookScreen(route.slug, route.chapter, modifier, go)
+        is Route.Quiz -> QuizIndexScreen(modifier, go)
+        is Route.QuizPack -> QuizScreen(route.slug, modifier, go)
         else -> PlaceholderScreen(route, modifier)
     }
 }
