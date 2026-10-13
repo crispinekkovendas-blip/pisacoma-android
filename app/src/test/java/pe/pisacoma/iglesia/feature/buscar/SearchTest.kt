@@ -10,7 +10,7 @@ import java.io.File
 
 /** Port of the site's utils/search.ts over the bundled index: same scores, same rows, same hrefs. */
 class SearchTest {
-    private val index = runBlocking { SearchRepository(FileAssetSource(File("src/main/assets"))).index() }
+    private val index = runBlocking { SearchRepository(pe.pisacoma.iglesia.data.TestAssets.source).index() }
 
     @Test fun normalizeFoldsAccentsAndPunctuation() {
         assertEquals("senor dame paz", Search.normalize("¡Señor, dame paz!"))

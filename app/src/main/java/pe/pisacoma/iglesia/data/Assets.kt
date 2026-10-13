@@ -26,5 +26,12 @@ class FileAssetSource(private val root: File) : AssetSource {
     override suspend fun exists(path: String): Boolean = File(root, path).isFile
 }
 
+/** Several sources layered: the first one that has the path answers (JVM tests read assets + content/). */
+class CompositeAssetSource(private val sources: List<AssetSource>) : AssetSource {
+    override suspend fun read(path: String): String =
+        (sources.firstOrNull { it.exists(path) } ?: throw java.io.FileNotFoundException(path)).read(path)
+    override suspend fun exists(path: String): Boolean = sources.any { it.exists(path) }
+}
+
 /** One lenient parser for every bundled file: unknown keys are ignored so the site can add fields. */
 val AppJson: Json = Json { ignoreUnknownKeys = true; isLenient = true; coerceInputValues = true }

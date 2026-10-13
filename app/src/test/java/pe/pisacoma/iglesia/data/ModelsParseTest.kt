@@ -10,7 +10,7 @@ import java.io.File
 
 /** The models parse the real bundled files (read from the source tree on the JVM). */
 class ModelsParseTest {
-    private val assets = FileAssetSource(File("src/main/assets"))
+    private val assets = TestAssets.source
 
     @Test fun spanishHymnalHas613Hymns() = runBlocking {
         val hymns = HymnRepository(assets).all(HymnVariant.ES)
