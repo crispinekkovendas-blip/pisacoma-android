@@ -1,5 +1,6 @@
 package pe.pisacoma.iglesia.feature.himnario
 
+import pe.pisacoma.iglesia.data.content.ContentErrors
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -27,7 +28,7 @@ class HymnViewModel(private val hymns: HymnRepository, private val userState: Us
     val state: StateFlow<HymnUi> = _state
 
     init {
-        viewModelScope.launch {
+        viewModelScope.launch(ContentErrors) {
             val v = HymnVariant.fromSlug(variant)
             val h = v?.let { hymns.get(it, number) }
             if (h == null) { _state.value = HymnUi.NotFound; return@launch }

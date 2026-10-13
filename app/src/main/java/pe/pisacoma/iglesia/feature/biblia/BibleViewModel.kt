@@ -1,5 +1,6 @@
 package pe.pisacoma.iglesia.feature.biblia
 
+import pe.pisacoma.iglesia.data.content.ContentErrors
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -48,7 +49,7 @@ class BibleViewModel(private val bible: BibleRepository, private val userState: 
     val state: StateFlow<BibleUi> = _state
 
     init {
-        viewModelScope.launch {
+        viewModelScope.launch(ContentErrors) {
             val books = bible.books()
             val b = (book ?: 43).coerceIn(1, 66)
             val max = books.first { it.num == b }.chapters
@@ -63,7 +64,7 @@ class BibleViewModel(private val bible: BibleRepository, private val userState: 
     }.getOrDefault(emptyList())
 
     fun open(bookNum: Int, chapter: Int, keepTarget: Boolean = false) {
-        viewModelScope.launch {
+        viewModelScope.launch(ContentErrors) {
             _state.update { it.copy(bookNum = bookNum, chapter = chapter, loading = true, targetVerse = if (keepTarget) it.targetVerse else 0, savedAt = null) }
             val verses = bible.verses(bookNum, chapter, 1, 999)
             val name = _state.value.books.firstOrNull { it.num == bookNum }?.name ?: ""

@@ -1,7 +1,7 @@
 package pe.pisacoma.iglesia
 
 import android.graphics.Bitmap
-import androidx.compose.ui.test.junit4.AndroidComposeTestRule
+import androidx.compose.ui.test.junit4.ComposeTestRule
 import androidx.test.platform.app.InstrumentationRegistry
 import java.io.File
 
@@ -11,7 +11,7 @@ import java.io.File
  * which the CI workflow pulls as the "ui-<run>" artifact: the parity evidence against the site.
  */
 object Shots {
-    fun save(rule: AndroidComposeTestRule<*, *>, name: String) {
+    fun save(rule: ComposeTestRule, name: String) {
         rule.waitForIdle()
         try {
             val inst = InstrumentationRegistry.getInstrumentation()

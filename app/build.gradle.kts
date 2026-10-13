@@ -18,8 +18,17 @@ android {
         minSdk = 24
         targetSdk = 36
         versionCode = runNumber.toInt()
-        versionName = "0.1.$runNumber"
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        versionName = "0.2.$runNumber"
+        // Seeds the content store from the test APK's assets before any UI test runs.
+        testInstrumentationRunner = "pe.pisacoma.iglesia.ContentTestRunner"
+        // Where the app downloads content/ from (file by file, same paths as the manifest).
+        buildConfigField("String", "CONTENT_BASE_URL", "\"https://raw.githubusercontent.com/crispinekkovendas-blip/pisacoma-android/main/content/\"")
+    }
+
+    sourceSets {
+        // The emulator tests carry the whole downloadable content as their own assets, so they
+        // run offline: ContentTestRunner copies it into filesDir/content before the first test.
+        getByName("androidTest").assets.srcDir("../content")
     }
 
     signingConfigs {

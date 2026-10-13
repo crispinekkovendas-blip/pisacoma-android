@@ -27,6 +27,8 @@ sealed class Route(val path: String) {
     data class QuizPack(val slug: String) : Route("/quiz/$slug")
     data object Quien : Route("/quien")
     data object Buscar : Route("/buscar")
+    /** App-only: what to keep on the phone (the first open's mandatory choice, later the menu's «Descargas»). */
+    data object Descargas : Route("/descargas")
 
     /** The path without its query string, for "is this section active" checks. */
     val base: String get() = path.substringBefore('?')
@@ -57,6 +59,7 @@ sealed class Route(val path: String) {
         const val QUIZ_PACK = "/quiz/{slug}"
         const val QUIEN = "/quien"
         const val BUSCAR = "/buscar"
+        const val DESCARGAS = "/descargas"
 
         /** Parses a site path (from a deep link or a bundled href) into a route, or null. */
         fun parse(path: String): Route? {
@@ -84,6 +87,7 @@ sealed class Route(val path: String) {
                 parts.size == 2 && parts[0] == "quiz" -> QuizPack(parts[1])
                 p == QUIEN -> Quien
                 p == BUSCAR -> Buscar
+                p == DESCARGAS -> Descargas
                 else -> null
             }
         }

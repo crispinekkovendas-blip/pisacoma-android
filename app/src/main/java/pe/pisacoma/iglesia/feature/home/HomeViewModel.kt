@@ -1,5 +1,6 @@
 package pe.pisacoma.iglesia.feature.home
 
+import pe.pisacoma.iglesia.data.content.ContentErrors
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -48,7 +49,7 @@ class HomeViewModel(
     val state: StateFlow<HomeUi> = _state
 
     init {
-        viewModelScope.launch {
+        viewModelScope.launch(ContentErrors) {
             val now = System.currentTimeMillis()
             val q = quarterly.quarterly()
             val c = church.church()

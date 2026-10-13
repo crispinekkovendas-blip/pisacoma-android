@@ -31,4 +31,19 @@ object Http {
             res.body?.string() ?: ""
         }
     }
+
+    /** Content downloads: a longer read timeout for the multi-megabyte EGW books. */
+    private val downloads: OkHttpClient by lazy {
+        client.newBuilder().readTimeout(60, TimeUnit.SECONDS).callTimeout(120, TimeUnit.SECONDS).build()
+    }
+
+    /** GET → body bytes; throws [HttpStatus] on non-2xx and IOException on network trouble. */
+    suspend fun bytes(url: String): ByteArray = withContext(Dispatchers.IO) {
+        if (forceOffline) throw IOException("offline (forced by test)")
+        val req = Request.Builder().url(url).header("User-Agent", "Mozilla/5.0 Pisacoma-Android").build()
+        downloads.newCall(req).execute().use { res ->
+            if (!res.isSuccessful) throw HttpStatus(res.code)
+            res.body?.bytes() ?: ByteArray(0)
+        }
+    }
 }

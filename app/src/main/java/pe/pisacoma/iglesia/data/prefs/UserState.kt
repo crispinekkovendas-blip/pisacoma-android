@@ -96,6 +96,10 @@ class UserState(private val store: KeyValueStore) {
         const val videosCache = "videos:cache"
         const val videosCacheAt = "videos:cacheAt"
         const val quienNames = "quien:names"
+        /** «todo» | «esencial» | «uso» | «en-linea»; unset until the first open's choice. */
+        const val contentMode = "contenido.modo"
+        /** "1" while the chosen packs are not fully stored (the download resumes on the next open). */
+        const val contentPending = "contenido.pendiente"
     }
 
     companion object {

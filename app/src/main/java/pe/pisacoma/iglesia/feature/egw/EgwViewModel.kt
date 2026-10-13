@@ -1,5 +1,6 @@
 package pe.pisacoma.iglesia.feature.egw
 
+import pe.pisacoma.iglesia.data.content.ContentErrors
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -43,10 +44,10 @@ class EgwCatalogViewModel(private val egw: EgwRepository, private val userState:
 
     init {
         refresh()
-        viewModelScope.launch { userState.changes().collect { key -> if (key.startsWith("egw:")) refresh() } }
+        viewModelScope.launch(ContentErrors) { userState.changes().collect { key -> if (key.startsWith("egw:")) refresh() } }
     }
 
-    fun refresh() = viewModelScope.launch {
+    fun refresh() = viewModelScope.launch(ContentErrors) {
         val rails = egw.rails()
         val stats = rails.flatMap { it.second }.associate { b ->
             val done = (1..b.chapters).count { userState.string(UserState.Keys.egwDone(b.slug, it)) != null }
@@ -83,7 +84,7 @@ class EgwBookViewModel(private val egw: EgwRepository, private val userState: Us
     val state: StateFlow<BookUi> = _state
 
     init {
-        viewModelScope.launch {
+        viewModelScope.launch(ContentErrors) {
             val meta = egw.meta(slug)
             val book = egw.book(slug)
             if (meta == null || book == null) { _state.update { it.copy(notFound = true) }; return@launch }

@@ -1,5 +1,6 @@
 package pe.pisacoma.iglesia.feature.himnario
 
+import pe.pisacoma.iglesia.data.content.ContentErrors
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -55,7 +56,7 @@ class HymnalViewModel(private val hymns: HymnRepository, private val userState: 
 
     fun select(variant: HymnVariant) {
         _state.update { it.copy(variant = variant, query = "", loading = true) }
-        viewModelScope.launch {
+        viewModelScope.launch(ContentErrors) {
             val seen = HashSet<Int>()
             val rows = hymns.all(variant).mapNotNull { h -> if (seen.add(h.number)) HymnRow(h.number, h.title, h.bibleReference) else null }
             val byNum = rows.associateBy { it.number }

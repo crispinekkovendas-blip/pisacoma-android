@@ -1,5 +1,6 @@
 package pe.pisacoma.iglesia.feature.escuela
 
+import pe.pisacoma.iglesia.data.content.ContentErrors
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -45,10 +46,10 @@ class QuarterViewModel(private val repo: QuarterlyRepository, private val userSt
 
     init {
         refresh()
-        viewModelScope.launch { userState.changes().collect { key -> if (key.startsWith("escuela:")) refresh() } }
+        viewModelScope.launch(ContentErrors) { userState.changes().collect { key -> if (key.startsWith("escuela:")) refresh() } }
     }
 
-    fun refresh() = viewModelScope.launch {
+    fun refresh() = viewModelScope.launch(ContentErrors) {
         val q = repo.quarterly()
         val now = System.currentTimeMillis()
         val status = Zmanim.quarterStatus(Zmanim.QuarterDates(q.startDate, q.endDate), now)
@@ -100,7 +101,7 @@ class LessonViewModel(
     private lateinit var qid: String
 
     init {
-        viewModelScope.launch {
+        viewModelScope.launch(ContentErrors) {
             val q = repo.quarterly()
             qid = q.id
             val lesson = q.lessons.firstOrNull { it.number == number }

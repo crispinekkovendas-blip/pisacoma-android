@@ -1,5 +1,6 @@
 package pe.pisacoma.iglesia.feature.videos
 
+import pe.pisacoma.iglesia.data.content.ContentErrors
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -48,7 +49,7 @@ class VideosViewModel(private val userState: UserState) : ViewModel() {
 
     init { load() }
 
-    fun load() = viewModelScope.launch {
+    fun load() = viewModelScope.launch(ContentErrors) {
         _state.update { it.copy(loading = true, offline = false) }
         val cached = userState.string(UserState.Keys.videosCache)
         val cachedAt = userState.string(UserState.Keys.videosCacheAt)?.toLongOrNull() ?: 0L

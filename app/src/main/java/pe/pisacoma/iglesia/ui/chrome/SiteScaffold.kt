@@ -10,7 +10,11 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
+import pe.pisacoma.iglesia.App
+import pe.pisacoma.iglesia.ui.components.MissingContentNotice
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -34,11 +38,13 @@ fun SiteScaffold(
     route: Route,
     onNavigate: (Route) -> Unit,
     footer: Boolean = false,
+    onReload: () -> Unit = {},
     content: @Composable (Modifier) -> Unit,
 ) {
     PisacomaTheme(route.skin) {
         val c = LocalChrome.current
         var menuOpen by rememberSaveable { mutableStateOf(false) }
+        val missing by App.content.missing.collectAsState()
         Box(Modifier.fillMaxSize().background(c.background)) {
             Column(Modifier.fillMaxSize()) {
                 TopBar(
@@ -51,6 +57,13 @@ fun SiteScaffold(
                     content(Modifier.fillMaxSize())
                 }
                 if (footer) SiteFooter()
+            }
+            if (missing != null && route != Route.Descargas) {
+                MissingContentNotice(
+                    onRetry = { App.content.missing.value = null; onReload() },
+                    onDownloads = { App.content.missing.value = null; menuOpen = false; onNavigate(Route.Descargas) },
+                    modifier = Modifier.align(Alignment.BottomCenter),
+                )
             }
             FullMenu(
                 open = menuOpen,

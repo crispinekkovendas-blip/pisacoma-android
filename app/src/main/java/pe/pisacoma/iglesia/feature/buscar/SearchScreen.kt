@@ -1,5 +1,6 @@
 package pe.pisacoma.iglesia.feature.buscar
 
+import pe.pisacoma.iglesia.data.content.ContentMissing
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -66,7 +67,9 @@ fun SearchScreen(modifier: Modifier, go: (Route) -> Unit) {
     var index by remember { mutableStateOf<SearchIndex?>(null) }
     var query by rememberSaveable { mutableStateOf("") }
     val expanded = remember { mutableStateMapOf<String, Boolean>() }
-    LaunchedEffect(Unit) { index = App.repos.search.index() }
+    LaunchedEffect(Unit) {
+        try { index = App.repos.search.index() } catch (e: ContentMissing) { App.content.missing.value = e.path }
+    }
     val results = remember(index, query) { Search.search(index, query) }
     val hasQuery = query.trim().isNotEmpty()
     fun open(href: String) { Route.parse(href)?.let(go) }

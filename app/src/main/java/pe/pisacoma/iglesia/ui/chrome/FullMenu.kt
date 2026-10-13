@@ -149,7 +149,26 @@ fun FullMenu(open: Boolean, current: Route?, onNavigate: (Route) -> Unit, onClos
                 Spacer(Modifier.height(22.dp))
                 // .mm-foot
                 Box(Modifier.fillMaxWidth().height(1.dp).background(Tokens.sageA(0.18f)))
-                Spacer(Modifier.height(22.dp))
+                Spacer(Modifier.height(14.dp))
+                // App-only: what is kept on the phone (the first open's choice), changeable here.
+                val stored = remember(open) { pe.pisacoma.iglesia.App.content.storedBytes() }
+                val mode = remember(open) { pe.pisacoma.iglesia.data.content.ContentMode.of(pe.pisacoma.iglesia.App.repos.userState.string(pe.pisacoma.iglesia.data.prefs.UserState.Keys.contentMode)) }
+                Column(
+                    Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(Metrics.menuRowRadius.dp))
+                        .pressable(scale = 0.985f, onClick = { onNavigate(Route.Descargas) })
+                        .padding(horizontal = 12.dp, vertical = 10.dp)
+                        .testTag("menu-descargas"),
+                ) {
+                    Text("Descargas", fontFamily = Fraunces, fontWeight = FontWeight.SemiBold, fontSize = 15.sp, color = Tokens.inkDeep)
+                    Spacer(Modifier.height(3.dp))
+                    Eyebrow(
+                        listOfNotNull(mode?.label, if (stored > 0) "Guardado: ${pe.pisacoma.iglesia.data.content.formatMb(stored)}" else null).joinToString(" · ").ifEmpty { "Qué guardar en este teléfono" },
+                        Tokens.sageText,
+                    )
+                }
+                Spacer(Modifier.height(14.dp))
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(14.dp)) {
                     Icon(painterResource(R.drawable.sda_symbol_circle), null, tint = Tokens.sage, modifier = Modifier.size(40.dp))
                     Column {
