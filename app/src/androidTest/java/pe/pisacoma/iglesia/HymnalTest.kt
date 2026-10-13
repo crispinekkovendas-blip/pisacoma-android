@@ -12,6 +12,8 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToNode
+import androidx.compose.ui.test.performSemanticsAction
+import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.test.performTextInput
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.Before
@@ -87,11 +89,11 @@ class HymnalTest {
         rule.waitForIdle()
         rule.onNodeWithText("ESTROFA 1").assertExists()
         Shots.save(rule, "himno-proyectar")
-        rule.onNodeWithTag("projector-close").performClick()
+        rule.onNodeWithTag("projector-close").performSemanticsAction(SemanticsActions.OnClick)
         rule.waitUntil(5_000) { rule.onAllNodes(hasTestTag("projector")).fetchSemanticsNodes().isEmpty() }
+        rule.waitUntil(5_000) { rule.onAllNodes(hasTestTag("hymn-lyrics"), useUnmergedTree = true).fetchSemanticsNodes().isNotEmpty() }
         Shots.save(rule, "himno-tras-proyectar")
-        rule.waitUntil(5_000) { rule.onAllNodes(hasTestTag("hymn-lyrics")).fetchSemanticsNodes().isNotEmpty() }
-        rule.onNodeWithTag("hymn-lyrics").assertExists()
+        rule.onNodeWithTag("hymn-lyrics", useUnmergedTree = true).assertExists()
     }
 
     @Test

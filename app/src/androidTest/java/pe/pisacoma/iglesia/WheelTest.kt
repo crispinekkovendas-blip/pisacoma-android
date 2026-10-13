@@ -6,6 +6,7 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.Rule
@@ -26,22 +27,22 @@ class WheelTest {
     @Test
     fun addRemoveAndSpin() {
         openWheel()
-        rule.onNodeWithTag("wheel-clear").performClick()
+        rule.onNodeWithTag("wheel-clear").performScrollTo().performClick()
         rule.waitForIdle()
         Shots.save(rule, "quien-vacia")
         rule.waitUntil(5_000) { rule.onAllNodes(hasTestTag("wheel-empty")).fetchSemanticsNodes().isNotEmpty() }
         rule.onNodeWithTag("wheel-empty").assertExists()
-        rule.onNodeWithTag("wheel-input").performTextInput("Ana, Luis")
-        rule.onNodeWithTag("wheel-add").performClick()
+        rule.onNodeWithTag("wheel-input").performScrollTo().performTextInput("Ana, Luis")
+        rule.onNodeWithTag("wheel-add").performScrollTo().performClick()
         rule.waitForIdle()
         rule.onNodeWithTag("wheel-name-Ana").assertExists()
         rule.onNodeWithTag("wheel-name-Luis").assertExists()
         rule.onNodeWithTag("wheel-segments-2").assertExists()
         Shots.save(rule, "quien-ruleta")
-        rule.onNodeWithTag("wheel-spin").performClick()
+        rule.onNodeWithTag("wheel-spin").performScrollTo().performClick()
         rule.waitUntil(8_000) { rule.onAllNodesWithTagList("wheel-winner").isNotEmpty() }
         rule.onNodeWithTag("wheel-winner").assertExists()
-        rule.onNodeWithTag("wheel-remove-Luis").performClick()
+        rule.onNodeWithTag("wheel-remove-Luis", useUnmergedTree = true).performScrollTo().performClick()
         rule.waitForIdle()
         rule.onNodeWithTag("wheel-name-Ana").assertExists()
         rule.onNodeWithTag("wheel-single").assertExists()

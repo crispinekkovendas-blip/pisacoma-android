@@ -60,8 +60,8 @@ class LessonTest {
         rule.waitForIdle()
         rule.onNodeWithTag("lesson-list").performScrollToNode(hasTestTag("lesson-1"))
         Shots.save(rule, "escuela-overview-tras-dia")
-        rule.waitUntil(5_000) { rule.onAllNodes(hasTestTag("lesson-1-dots-done-1")).fetchSemanticsNodes().isNotEmpty() }
-        rule.onNodeWithTag("lesson-1-dots-done-1").assertExists()
+        rule.waitUntil(5_000) { rule.onAllNodes(hasTestTag("lesson-1-dots-done-1"), useUnmergedTree = true).fetchSemanticsNodes().isNotEmpty() }
+        rule.onNodeWithTag("lesson-1-dots-done-1", useUnmergedTree = true).assertExists()
         // reopen: day 2 is still selected (lastDay)
         rule.onNodeWithTag("lesson-1").performClick()
         rule.waitForIdle()

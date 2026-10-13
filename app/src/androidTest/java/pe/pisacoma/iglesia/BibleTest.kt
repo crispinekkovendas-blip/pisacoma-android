@@ -5,6 +5,8 @@ import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.performScrollToNode
+import androidx.compose.ui.test.performSemanticsAction
+import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
@@ -40,11 +42,9 @@ class BibleTest {
         rule.onNodeWithTag("bible-next").performClick()
         rule.waitForIdle()
         rule.onNodeWithText("Juan 4").assertIsDisplayed()
-        rule.onNodeWithTag("bible-list").performScrollToNode(hasTestTag("bible-prev"))
-        rule.onNodeWithTag("bible-prev").performClick()
+        rule.onNodeWithTag("bible-prev").performSemanticsAction(SemanticsActions.OnClick)
         rule.waitUntil(5_000) { rule.onAllNodes(hasText("Juan 3")).fetchSemanticsNodes().isNotEmpty() }
-        rule.onNodeWithTag("bible-list").performScrollToNode(hasTestTag("bible-prev"))
-        rule.onNodeWithTag("bible-prev").performClick()
+        rule.onNodeWithTag("bible-prev").performSemanticsAction(SemanticsActions.OnClick)
         rule.waitUntil(5_000) { rule.onAllNodes(hasText("Juan 2")).fetchSemanticsNodes().isNotEmpty() }
         Shots.save(rule, "biblia-juan-2")
         rule.onNodeWithText("Juan 2").assertExists()

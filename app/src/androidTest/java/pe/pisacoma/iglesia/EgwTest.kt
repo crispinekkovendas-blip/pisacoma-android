@@ -63,7 +63,7 @@ class EgwTest {
         rule.onNodeWithTag("egw-page").performScrollToNode(hasTestTag("rail-I"))
         rule.onNodeWithTag("rail-row-I").performScrollToNode(hasTestTag("cover-cc"))
         Shots.save(rule, "egw-catalogo-progreso")
-        rule.waitUntil(5_000) { rule.onAllNodes(hasTestTag("continue-cc")).fetchSemanticsNodes().isNotEmpty() }
-        rule.onNodeWithTag("continue-cc").assertExists()
+        rule.waitUntil(5_000) { rule.onAllNodes(hasTestTag("continue-cc"), useUnmergedTree = true).fetchSemanticsNodes().isNotEmpty() }
+        rule.onNodeWithTag("continue-cc", useUnmergedTree = true).assertExists()
     }
 }
