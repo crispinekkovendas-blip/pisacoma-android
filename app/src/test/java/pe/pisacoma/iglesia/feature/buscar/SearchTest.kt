@@ -25,7 +25,8 @@ class SearchTest {
         assertEquals(0, Search.scoreTitle(q, tokens, "Cantad alegres"))
         // word hit 12 + short-title bonus (6 − floor(len/12)); "dios santo" is 10 chars → +6
         assertEquals(12 + 6, Search.scoreTitle(q, tokens, "Dios santo"))
-        assertEquals(12 + 4, Search.scoreTitle(q, tokens, "Santo es el Señor de los ejércitos"))
+        // 40 chars → floor(40/12) = 3 → +3 (a title that starts with the query scores 60 instead)
+        assertEquals(12 + 3, Search.scoreTitle(q, tokens, "El Dios santo de los ejércitos de Israel"))
     }
 
     @Test fun explicitReferenceScores200() {
