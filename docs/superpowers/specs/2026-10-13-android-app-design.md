@@ -1,6 +1,6 @@
 # Pisacoma Android app — design spec
 
-**Date:** 2026-10-13 · **Status:** draft for review · **Source of truth being mirrored:** `C:\Users\admin\sda-church-nextjs\quiz-qwik` (Qwik City site, live at https://quiz-qwik.vercel.app)
+**Date:** 2026-10-13 · **Status:** approved 2026-10-13 (+ GitHub build decision) · **Source of truth being mirrored:** `C:\Users\admin\sda-church-nextjs\quiz-qwik` (Qwik City site, live at https://quiz-qwik.vercel.app)
 
 ## 1. Intent
 
@@ -22,8 +22,8 @@ Not in scope: iOS, tablets/landscape layouts beyond what the site does, Google P
 | 6 | YouTube | `android-youtube-player` (WebView wrapper of the IFrame API) inside the app's own HBO-style controls, matching the site's custom player | YouTube terms require the IFrame player; the library gives native-feeling controls |
 | 7 | Persistence | **SharedPreferences/DataStore with the site's localStorage key names verbatim** (`biblia:bookmarks`, `egw:<slug>:ch<n>:notes`, `escuela:<QID>:lecc<n>:day<d>:done`, `quiz.<slug>.v1`, `himnario.recent`, `inicio.videos.pausa`, …) | parity in behaviour, and a future import/export between site and app stays trivial |
 | 8 | Fonts | Fraunces, Inter, DM Sans converted once from the site's woff2 to TTF (wawoff2 is already in `quiz-qwik/motion/node_modules`) and bundled in `res/font` | Android has no woff2 font loader |
-| 9 | Publishing | **signed release APK built locally**, installed by file/ADB; no Play account | purchase needs an explicit yes |
-| 10 | Where it lives | project at **`E:\pisacoma-android`** (junction `C:\Users\admin\sda-church-android` → it), `GRADLE_USER_HOME=E:\gradle-home`, emulator AVDs on E:; JDK = Android Studio's bundled `jbr` (OpenJDK 21) | C: has 13 GB free; Gradle + AGP caches alone are 1–2 GB |
+| 9 | Publishing | **public GitHub repo `crispinekkovendas-blip/pisacoma-android`; GitHub Actions runs Gradle on every push** (unit tests + APK signed with a shared key from repo secrets, attached to the run; a `v*` tag publishes a GitHub Release with the APK); no Play account | user: *"do it all on github public repo, the build and gradle also"*; the Play account purchase still needs an explicit yes |
+| 10 | Where it lives | source checkout at `E:/pisacoma-android` (junction `C:/Users/admin/sda-church-android` points to it); **no Gradle runs on this PC**: builds, tests and emulator screenshots run on GitHub Actions (ubuntu, Temurin 17, the AGP 9.1 / Kotlin 2.2 / Gradle 9.3 setup already proven in `emunah-shlemah-android`); APKs are downloaded from the run and installed on the local AVD or the phone | C: has 13 GB free; the user asked for the build on GitHub |
 
 ## 3. Architecture
 
@@ -121,13 +121,13 @@ Not ported: `/offline`, `/inicio-clasico`, `/404`, the service worker, `/contact
 
 - **Unit (JVM):** `Zmanim.kt` against the site's known Pisacoma sunset values; `BibleRefs.kt` against the cases in `bibleStore.ts`; `Search` ranking against `utils/search.ts` examples; markdown → refs; every asset JSON deserialises.
 - **Compose UI tests** on the emulator for the flows that carry state: quiz commit-answer, lesson done/notes persistence, hymn toggle + search, wheel add/remove.
-- **Parity check per screen:** side by side screenshots, emulator (Medium Phone, API 36.1 AVD already present) vs the site at 390 px, before a screen is called done.
-- **Release:** `./gradlew assembleRelease` with a local keystore on E:, install on the user's phone via ADB.
+- **Parity check per screen:** side by side screenshots, CI emulator screenshots or the local Medium Phone API 36.1 AVD with the downloaded APK, vs the site at 390 px, before a screen is called done.
+- **CI (`.github/workflows/android.yml`):** every push runs `testDebugUnitTest assembleDebug` and uploads `pisacoma-<run>.apk`; `workflow_dispatch` runs the Compose UI tests on an emulator and uploads screenshots (the parity evidence); a `v*` tag runs `assembleRelease` and attaches the APK to a GitHub Release. The signing keystore lives only in repo secrets (`SIGNING_KEYSTORE` base64 + passwords); without them the APK uses a debug key.
 
 ## 7. Build order (for the implementation plan)
 
-1. Scaffold on E: with Gradle wrapper, Kotlin 2.x, AGP 8.x, Compose BOM, `GRADLE_USER_HOME` on E:, JDK = `jbr`; empty app boots on the AVD.
+1. Scaffold (Gradle wrapper 9.3.1, Kotlin 2.2, AGP 9.1, Compose BOM) + the GitHub workflow; push; the first CI run produces an APK that boots on the AVD.
 2. `tools/sync-content.mjs` + `tools/fonts.mjs`; theme tokens; chrome (top bar, menu, footer); Navigation skeleton with placeholder screens.
 3. Content repositories + `UserState` + unit tests.
 4. Screens in nav order, each to parity: Himnario → Himno (+ audio service) → Escuela → Lección (+ Bible refs) → Biblia → EGW → Quiz → Quién → Buscar → Visítanos → Diccionario → Videos (+ player) → Inicio (Lottie) last, since it depends on live bits from the others.
-5. Release signing, APK on the phone, vault + memory update.
+5. Shared signing key in repo secrets, `v0.1.0` tag → GitHub Release, APK on the phone, vault + memory update.
