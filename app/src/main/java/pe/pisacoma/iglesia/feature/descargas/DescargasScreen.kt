@@ -59,7 +59,7 @@ fun DescargasScreen(modifier: Modifier, bare: Boolean, onContinue: () -> Unit) {
         item {
             Column(Modifier.padding(horizontal = 20.dp).let { if (bare) it.statusBarsPadding() else it }) {
                 Spacer(Modifier.height(if (bare) 36.dp else 44.dp))
-                EyebrowLine("— Sin conexión")
+                EyebrowLine("— Guardar en el teléfono")
                 Spacer(Modifier.height(18.dp))
                 PageTitle(titleWithEm("¿Qué quieres guardar", "en este teléfono", tail = "?"))
                 Spacer(Modifier.height(22.dp))

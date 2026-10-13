@@ -97,7 +97,8 @@ class DescargasTest {
         TestState.setMode("uso")
         TestState.wipeContent()
         Http.forceOffline = true
-        launch("/biblia")
+        // Apocalipsis: a book no earlier test opened, so the repository's in-process cache cannot answer.
+        launch("/biblia?libro=66&cap=1")
         rule.waitUntil(15_000) { rule.onAllNodes(hasTestTag("sin-conexion")).fetchSemanticsNodes().isNotEmpty() }
         Shots.save(rule, "sin-conexion-biblia")
         rule.onNodeWithTag("sin-conexion-descargas").performClick()
