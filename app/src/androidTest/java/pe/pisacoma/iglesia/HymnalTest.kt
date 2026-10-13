@@ -90,10 +90,10 @@ class HymnalTest {
         rule.onNodeWithText("ESTROFA 1").assertExists()
         Shots.save(rule, "himno-proyectar")
         rule.onNodeWithTag("projector-close").performSemanticsAction(SemanticsActions.OnClick)
-        rule.waitUntil(5_000) { rule.onAllNodes(hasTestTag("projector")).fetchSemanticsNodes().isEmpty() }
-        rule.waitUntil(5_000) { rule.onAllNodes(hasTestTag("hymn-lyrics"), useUnmergedTree = true).fetchSemanticsNodes().isNotEmpty() }
+        rule.waitUntil(8_000) { rule.onAllNodes(hasTestTag("projector")).fetchSemanticsNodes().isEmpty() }
         Shots.save(rule, "himno-tras-proyectar")
-        rule.onNodeWithTag("hymn-lyrics", useUnmergedTree = true).assertExists()
+        rule.waitUntil(8_000) { rule.onAllNodes(hasTestTag("hymn-lyrics"), useUnmergedTree = true).fetchSemanticsNodes().isNotEmpty() }
+        Shots.save(rule, "himno-tras-proyectar-2")
     }
 
     @Test

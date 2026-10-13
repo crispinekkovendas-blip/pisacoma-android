@@ -4,6 +4,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -50,6 +52,7 @@ import pe.pisacoma.iglesia.ui.theme.Tokens
 private fun hex(c: String): Color = runCatching { Color(android.graphics.Color.parseColor(c)) }.getOrDefault(Tokens.sage)
 
 /** The site's /egw: hero with the library numbers, then four «pasillos», each a horizontal rail of covers with reading progress. */
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun EgwCatalogScreen(modifier: Modifier, go: (Route) -> Unit) {
     val vm: EgwCatalogViewModel = viewModel { EgwCatalogViewModel(App.repos.egw, App.repos.userState) }
@@ -66,7 +69,7 @@ fun EgwCatalogScreen(modifier: Modifier, go: (Route) -> Unit) {
                 Spacer(Modifier.height(22.dp))
                 Lede("Un curso por volumen, organizados como una pequeña biblioteca: cada pasillo agrupa los libros por su intención original — clásicos pioneros, devocionales, vida práctica, y los tiempos finales.")
                 Spacer(Modifier.height(26.dp))
-                Row(horizontalArrangement = Arrangement.spacedBy(18.dp), verticalAlignment = Alignment.Bottom) {
+                FlowRow(horizontalArrangement = Arrangement.spacedBy(18.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                     Meta(s.books.size.toString(), "volúmenes")
                     Box(Modifier.width(1.dp).height(28.dp).background(Tokens.sageA(0.2f)))
                     Meta(String.format(java.util.Locale("es", "PE"), "%,d", s.totalChapters).replace(',', '.'), "capítulos")

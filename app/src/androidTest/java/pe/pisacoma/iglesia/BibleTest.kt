@@ -39,6 +39,7 @@ class BibleTest {
         rule.onNodeWithTag("bible-list").performScrollToNode(hasTestTag("verse-16"))
         rule.onNodeWithText("Porque de tal manera amó Dios al mundo", substring = true).assertIsDisplayed()
         Shots.save(rule, "biblia-juan-3")
+        rule.onNodeWithTag("bible-list").performScrollToNode(hasTestTag("bible-title"))
         rule.onNodeWithTag("bible-next").performClick()
         rule.waitForIdle()
         rule.onNodeWithText("Juan 4").assertIsDisplayed()
