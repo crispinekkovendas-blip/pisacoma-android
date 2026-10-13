@@ -13,7 +13,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         // A deep link https://quiz-qwik.vercel.app/<path> opens the matching screen.
-        val deepLink = intent?.data?.path?.let { Route.parse(it) }
+        // Uri.path drops the query, and the site's links carry one (`/biblia/?libro=43&cap=3&v=16`).
+        val deepLink = intent?.data?.let { uri -> uri.path?.let { p -> Route.parse(p + (uri.query?.let { "?$it" } ?: "")) } }
         // Until the phone has chosen what to keep, the only screen is /descargas; «Continuar» then
         // goes where the open was headed.
         val firstRun = App.repos.userState.string(UserState.Keys.contentMode) == null
