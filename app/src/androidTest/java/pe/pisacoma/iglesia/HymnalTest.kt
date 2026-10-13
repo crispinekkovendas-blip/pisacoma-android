@@ -84,7 +84,7 @@ class HymnalTest {
         rule.onNodeWithTag("hymn-number").assertTextEquals("2")
         // the navigation transition keeps both hymn pages briefly: wait for exactly one «Proyectar»
         rule.waitUntil(8_000) { rule.onAllNodes(hasTestTag("hymn-project")).fetchSemanticsNodes().size == 1 }
-        rule.onNodeWithTag("hymn-project").performClick()
+        rule.onNodeWithTag("hymn-project").performScrollTo().performClick()
         Shots.save(rule, "himno-proyectar-abriendo")
         rule.waitUntil(8_000) { rule.onAllNodes(hasTestTag("projector")).fetchSemanticsNodes().isNotEmpty() }
         rule.onNodeWithTag("projector-stage").performClick() // cover → first stanza
