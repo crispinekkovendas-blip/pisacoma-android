@@ -55,8 +55,10 @@ class ContentDownloader(
                     if (fetchWithRetries(f.path)) { done++; bytes += f.bytes } else failed++
                     _state.value = DownloadState.Running(done, all.size, bytes, totalBytes, failed)
                 }
-                _state.value = if (failed == 0) DownloadState.Done(totalBytes) else DownloadState.Error(failed, all.size)
+                // The pending flag is settled before the final state is published, so whoever
+                // waits on the state sees both consistent.
                 onComplete(failed == 0)
+                _state.value = if (failed == 0) DownloadState.Done(totalBytes) else DownloadState.Error(failed, all.size)
             } finally {
                 running = false
             }

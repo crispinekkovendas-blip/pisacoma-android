@@ -61,6 +61,16 @@ class ContentStoreTest {
         assertEquals(null, s.missing.value)
     }
 
+    @Test fun staleFileIsRefetched() = runBlocking {
+        // A new APK ships a new manifest: a stored file whose size no longer matches is downloaded again.
+        val s = store()
+        File(s.dir, "data/x.json").apply { parentFile.mkdirs(); writeText("old") }
+        assertFalse(s.isStored("data/x.json"))
+        assertEquals("{\"x\":1}", s.read("data/x.json"))
+        assertEquals(1, fetched)
+        assertTrue(s.isStored("data/x.json"))
+    }
+
     @Test fun offlineStoredStillReads() = runBlocking {
         val s = store()
         s.read("data/x.json")
