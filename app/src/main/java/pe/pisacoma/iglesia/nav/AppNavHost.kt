@@ -16,6 +16,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import pe.pisacoma.iglesia.feature.biblia.BibleScreen
+import pe.pisacoma.iglesia.feature.egw.EgwBookScreen
+import pe.pisacoma.iglesia.feature.egw.EgwCatalogScreen
 import pe.pisacoma.iglesia.feature.escuela.LessonScreen
 import pe.pisacoma.iglesia.feature.escuela.QuarterScreen
 import pe.pisacoma.iglesia.feature.himnario.HymnScreen
@@ -96,6 +98,8 @@ fun ScreenFor(route: Route, modifier: Modifier, go: (Route) -> Unit) {
         is Route.Escuela -> QuarterScreen(modifier, go)
         is Route.Leccion -> LessonScreen(route.number, route.day, modifier, go)
         is Route.Biblia -> BibleScreen(route.book, route.chapter, route.verse, modifier, go)
+        is Route.Egw -> EgwCatalogScreen(modifier, go)
+        is Route.EgwBook -> EgwBookScreen(route.slug, route.chapter, modifier, go)
         else -> PlaceholderScreen(route, modifier)
     }
 }
