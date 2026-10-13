@@ -6,7 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
@@ -195,7 +195,7 @@ fun HomeScreen(modifier: Modifier, go: (Route) -> Unit) {
 
 /** One section: poster → Lottie (portrait/landscape cut) → veil → text, bottom-aligned. */
 @Composable
-private fun Scene(id: String, height: Dp, portrait: Boolean, paused: Boolean, light: Boolean = false, strongVeil: Boolean = false, content: @Composable BoxScope.() -> Unit) {
+private fun Scene(id: String, height: Dp, portrait: Boolean, paused: Boolean, light: Boolean = false, strongVeil: Boolean = false, content: @Composable ColumnScope.() -> Unit) {
     val cut = if (portrait) "portrait" else "landscape"
     Box(Modifier.fillMaxWidth().height(height).background(if (light) LIGHT_BG else BASALT).testTag("scene-$id")) {
         AsyncImage(model = "file:///android_asset/home/$id-$cut.jpg", contentDescription = null, contentScale = ContentScale.Crop, modifier = Modifier.fillMaxSize())
@@ -212,8 +212,8 @@ private fun Scene(id: String, height: Dp, portrait: Boolean, paused: Boolean, li
         }
         Box(Modifier.fillMaxSize().background(bottom))
         if (!portrait) Box(Modifier.fillMaxSize().background(Brush.horizontalGradient(0f to (if (light) pale else dark).copy(alpha = if (light) 0.85f else 0.62f), 0.36f to (if (light) pale else dark).copy(alpha = if (light) 0.3f else 0.3f), 0.58f to Color.Transparent)))
-        Column(Modifier.align(Alignment.BottomStart).fillMaxWidth(if (portrait) 1f else 0.46f).padding(horizontal = 20.dp).padding(bottom = 44.dp)) {
-            Box { content() }
+        Column(Modifier.align(Alignment.BottomStart).fillMaxWidth(if (portrait) 1f else 0.46f).padding(horizontal = 20.dp).padding(bottom = 44.dp), horizontalAlignment = Alignment.Start) {
+            content()
         }
     }
 }
