@@ -15,6 +15,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import pe.pisacoma.iglesia.feature.escuela.LessonScreen
+import pe.pisacoma.iglesia.feature.escuela.QuarterScreen
 import pe.pisacoma.iglesia.feature.himnario.HymnScreen
 import pe.pisacoma.iglesia.feature.himnario.HymnalIndexScreen
 import pe.pisacoma.iglesia.ui.chrome.SiteScaffold
@@ -90,6 +92,8 @@ fun ScreenFor(route: Route, modifier: Modifier, go: (Route) -> Unit) {
     when (route) {
         is Route.Himnario -> HymnalIndexScreen(modifier, go)
         is Route.Hymn -> HymnScreen(route.variant, route.number, modifier, go)
+        is Route.Escuela -> QuarterScreen(modifier, go)
+        is Route.Leccion -> LessonScreen(route.number, route.day, modifier, go)
         else -> PlaceholderScreen(route, modifier)
     }
 }
