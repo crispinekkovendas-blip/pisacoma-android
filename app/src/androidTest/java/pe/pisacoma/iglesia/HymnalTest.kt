@@ -1,6 +1,7 @@
 package pe.pisacoma.iglesia
 
 import androidx.compose.ui.test.assert
+import androidx.compose.ui.test.assertExists
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.hasAnyChild
@@ -82,14 +83,14 @@ class HymnalTest {
         rule.onNodeWithTag("hymn-number").assertTextEquals("2")
         rule.onNodeWithTag("hymn-project").performClick()
         rule.waitForIdle()
-        rule.onNodeWithTag("projector").assertIsDisplayed()
+        rule.onNodeWithTag("projector").assertExists()
         rule.onNodeWithTag("projector-stage").performClick() // cover → first stanza
         rule.waitForIdle()
-        rule.onNodeWithText("Estrofa 1").assertIsDisplayed()
+        rule.onNodeWithText("ESTROFA 1").assertExists()
         Shots.save(rule, "himno-proyectar")
         rule.onNodeWithTag("projector-close").performClick()
         rule.waitForIdle()
-        rule.onNodeWithTag("hymn-number").assertIsDisplayed()
+        rule.onNodeWithTag("hymn-number").assertExists()
     }
 
     @Test

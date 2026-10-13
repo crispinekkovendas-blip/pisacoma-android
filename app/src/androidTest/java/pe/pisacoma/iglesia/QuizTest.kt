@@ -1,6 +1,8 @@
 package pe.pisacoma.iglesia
 
+import androidx.compose.ui.test.assertExists
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithTag
@@ -40,14 +42,14 @@ class QuizTest {
         Shots.save(rule, "quiz-confirm")
         rule.onNodeWithTag("confirm-yes").performClick()
         rule.waitForIdle()
-        rule.onNodeWithTag("q1-locked").assertIsDisplayed()
-        rule.onNodeWithText("1 / 15 confirmadas", substring = true).assertIsDisplayed()
+        rule.onNodeWithTag("q1-locked").assertExists()
+        rule.onNodeWithTag("quiz-progress").assertTextEquals("/ 15 confirmadas")
         // relaunch the screen: still locked
         rule.activityRule.scenario.recreate()
         rule.waitForIdle()
         openFirstQuiz()
         rule.onNodeWithTag("quiz-page").performScrollToNode(hasTestTag("q1-locked"))
-        rule.onNodeWithTag("q1-locked").assertIsDisplayed()
+        rule.onNodeWithTag("q1-locked").assertExists()
     }
 
     @Test

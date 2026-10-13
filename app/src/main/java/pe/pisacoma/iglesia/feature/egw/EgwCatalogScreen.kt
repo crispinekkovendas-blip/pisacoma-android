@@ -104,7 +104,7 @@ fun EgwCatalogScreen(modifier: Modifier, go: (Route) -> Unit) {
                         }
                     }
                     Spacer(Modifier.height(16.dp))
-                    LazyRow(contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 20.dp), horizontalArrangement = Arrangement.spacedBy(14.dp)) {
+                    LazyRow(contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 20.dp), horizontalArrangement = Arrangement.spacedBy(14.dp), modifier = Modifier.testTag("rail-row-${aisle.roman}")) {
                         items(books.size, key = { books[it].slug }) { i -> Cover(books[i], s.stats[books[i].slug] ?: BookStats(0, null)) { go(Route.EgwBook(books[i].slug, it)) } }
                     }
                     Spacer(Modifier.height(40.dp))

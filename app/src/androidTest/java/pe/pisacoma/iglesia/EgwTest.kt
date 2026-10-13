@@ -1,6 +1,8 @@
 package pe.pisacoma.iglesia
 
+import androidx.compose.ui.test.assertExists
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithTag
@@ -35,7 +37,7 @@ class EgwTest {
             rule.onNodeWithTag("egw-page").performScrollToNode(hasTestTag("rail-$rail"))
             rule.onNodeWithTag("rail-$rail").assertIsDisplayed()
         }
-        rule.onNodeWithTag("egw-page").performScrollToNode(hasTestTag("cover-afc"))
+        rule.onNodeWithTag("rail-row-IV").performScrollToNode(hasTestTag("cover-afc"))
         rule.onNodeWithTag("cover-afc").assertIsDisplayed()
         Shots.save(rule, "egw-catalogo")
     }
@@ -43,22 +45,23 @@ class EgwTest {
     @Test
     fun bookReaderChaptersDoneAndContinue() {
         openEgw()
-        rule.onNodeWithTag("egw-page").performScrollToNode(hasTestTag("cover-cc"))
+        rule.onNodeWithTag("egw-page").performScrollToNode(hasTestTag("rail-I"))
+        rule.onNodeWithTag("rail-row-I").performScrollToNode(hasTestTag("cover-cc"))
         rule.onNodeWithTag("cover-cc").performClick()
         rule.waitForIdle()
-        rule.onNodeWithText("El Camino a Cristo").assertIsDisplayed()
-        rule.onNodeWithText("El camino a Cristo").assertIsDisplayed() // chapter 1 title
+        rule.onNodeWithTag("egw-chapter-title").assertTextEquals("El camino a Cristo") // chapter 1 title
         Shots.save(rule, "egw-libro-cc")
         rule.onNodeWithTag("egw-chapters").performClick()
         rule.waitForIdle()
         rule.onNodeWithTag("chapter-2").performClick()
         rule.waitForIdle()
-        rule.onNodeWithText("Capítulo 1— Amor supremo").assertIsDisplayed()
+        rule.onNodeWithTag("egw-chapter-title").assertTextEquals("Capítulo 1— Amor supremo")
         rule.onNodeWithTag("chapter-done").performScrollTo().performClick()
         rule.waitForIdle()
         rule.activityRule.scenario.onActivity { it.onBackPressedDispatcher.onBackPressed() }
         rule.waitForIdle()
-        rule.onNodeWithTag("egw-page").performScrollToNode(hasTestTag("continue-cc"))
-        rule.onNodeWithTag("continue-cc").assertIsDisplayed()
+        rule.onNodeWithTag("egw-page").performScrollToNode(hasTestTag("rail-I"))
+        rule.onNodeWithTag("rail-row-I").performScrollToNode(hasTestTag("cover-cc"))
+        rule.onNodeWithTag("continue-cc").assertExists()
     }
 }

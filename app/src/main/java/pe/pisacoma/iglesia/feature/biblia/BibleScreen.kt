@@ -92,7 +92,7 @@ fun BibleScreen(book: Int?, chapter: Int?, verse: Int?, modifier: Modifier, go: 
         }
     }
 
-    LazyColumn(modifier, state = list) {
+    LazyColumn(modifier.testTag("bible-list"), state = list) {
         item {
             Column(Modifier.padding(horizontal = 20.dp)) {
                 Spacer(Modifier.height(44.dp))

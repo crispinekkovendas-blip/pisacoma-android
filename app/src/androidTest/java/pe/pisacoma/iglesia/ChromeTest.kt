@@ -37,7 +37,7 @@ class ChromeTest {
     fun searchButtonOpensBuscar() {
         rule.onNodeWithTag("nav-search").performClick()
         rule.waitForIdle()
-        rule.onNodeWithTag("screen-/buscar").assertIsDisplayed()
+        rule.onNodeWithTag("search-page").assertIsDisplayed()
     }
 
     @Test

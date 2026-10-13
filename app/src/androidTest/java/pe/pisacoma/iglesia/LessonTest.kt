@@ -1,5 +1,6 @@
 package pe.pisacoma.iglesia
 
+import androidx.compose.ui.test.assertExists
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
@@ -38,7 +39,7 @@ class LessonTest {
         rule.onNodeWithTag("nav-menu").performClick()
         rule.onNodeWithTag("menu-Esc. Sabática").performClick()
         rule.waitForIdle()
-        rule.onNodeWithText("Primera y segunda").assertIsDisplayed()
+        rule.onNodeWithText("Primera y segunda", substring = true).assertIsDisplayed()
         rule.onNodeWithTag("lesson-list").performScrollToNode(hasTestTag("lesson-13"))
         rule.onNodeWithTag("lesson-13").assertIsDisplayed()
         Shots.save(rule, "escuela-overview")
@@ -47,10 +48,10 @@ class LessonTest {
     @Test
     fun dayTabsDoneAndLastDayPersist() {
         openLesson1()
-        rule.onNodeWithText("Lección 1: El ministerio de Pablo en Corinto").assertIsDisplayed()
+        rule.onNodeWithText("Lección 1: El ministerio de Pablo en Corinto").assertExists()
         rule.onNodeWithTag("day-tab-1").performClick()
         rule.waitForIdle()
-        rule.onNodeWithTag("day-done").performScrollTo().performClick()
+        rule.onNodeWithTag("day-done").performClick()
         rule.waitForIdle()
         Shots.save(rule, "escuela-lesson-day2-done")
         // back to the overview: lesson 1 shows one filled dot

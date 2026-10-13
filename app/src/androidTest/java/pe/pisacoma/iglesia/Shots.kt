@@ -16,9 +16,14 @@ import java.io.File
 object Shots {
     fun save(rule: AndroidComposeTestRule<*, *>, name: String) {
         rule.waitForIdle()
-        val bitmap = rule.onRoot().captureToImage().asAndroidBitmap()
-        val ctx = InstrumentationRegistry.getInstrumentation().targetContext
-        val dir = File(ctx.getExternalFilesDir(null), "shots").apply { mkdirs() }
-        File(dir, "$name.png").outputStream().use { bitmap.compress(Bitmap.CompressFormat.PNG, 100, it) }
+        try {
+            val bitmap = rule.onRoot().captureToImage().asAndroidBitmap()
+            val ctx = InstrumentationRegistry.getInstrumentation().targetContext
+            val dir = File(ctx.getExternalFilesDir(null), "shots").apply { mkdirs() }
+            File(dir, "$name.png").outputStream().use { bitmap.compress(Bitmap.CompressFormat.PNG, 100, it) }
+        } catch (e: Throwable) {
+            // a dialog window on top makes the root capture fail; the screenshot is evidence, not the test
+            android.util.Log.w("Shots", "could not capture $name: ${e.message}")
+        }
     }
 }

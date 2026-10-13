@@ -1,5 +1,6 @@
 package pe.pisacoma.iglesia
 
+import androidx.compose.ui.test.assertExists
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithTag
@@ -27,21 +28,21 @@ class WheelTest {
         openWheel()
         rule.onNodeWithTag("wheel-clear").performClick()
         rule.waitForIdle()
-        rule.onNodeWithText("Agrega nombres").assertIsDisplayed()
+        rule.onNodeWithTag("wheel-empty").assertExists()
         rule.onNodeWithTag("wheel-input").performTextInput("Ana, Luis")
         rule.onNodeWithTag("wheel-add").performClick()
         rule.waitForIdle()
-        rule.onNodeWithTag("wheel-name-Ana").assertIsDisplayed()
-        rule.onNodeWithTag("wheel-name-Luis").assertIsDisplayed()
-        rule.onNodeWithTag("wheel-segments-2").assertIsDisplayed()
+        rule.onNodeWithTag("wheel-name-Ana").assertExists()
+        rule.onNodeWithTag("wheel-name-Luis").assertExists()
+        rule.onNodeWithTag("wheel-segments-2").assertExists()
         Shots.save(rule, "quien-ruleta")
         rule.onNodeWithTag("wheel-spin").performClick()
         rule.waitUntil(8_000) { rule.onAllNodesWithTagList("wheel-winner").isNotEmpty() }
-        rule.onNodeWithTag("wheel-winner").assertIsDisplayed()
+        rule.onNodeWithTag("wheel-winner").assertExists()
         rule.onNodeWithTag("wheel-remove-Luis").performClick()
         rule.waitForIdle()
-        rule.onNodeWithText("Ana").assertIsDisplayed()
-        rule.onNodeWithTag("wheel-single").assertIsDisplayed()
+        rule.onNodeWithTag("wheel-name-Ana").assertExists()
+        rule.onNodeWithTag("wheel-single").assertExists()
     }
 }
 

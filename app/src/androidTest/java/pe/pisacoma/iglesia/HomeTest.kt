@@ -39,7 +39,7 @@ class HomeTest {
         rule.onNodeWithTag("home").performScrollToNode(hasTestTag("scene-himnario-action"))
         rule.onNodeWithTag("scene-himnario-action").performClick()
         rule.waitForIdle()
-        rule.onNodeWithTag("hymn-count").assertIsDisplayed()
+        rule.onNodeWithTag("hymn-list").assertIsDisplayed()
     }
 
     @Test

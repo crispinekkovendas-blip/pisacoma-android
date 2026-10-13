@@ -1,6 +1,10 @@
 package pe.pisacoma.iglesia
 
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.hasAnyAncestor
+import androidx.compose.ui.test.hasTestTag
+import androidx.compose.ui.test.hasText
+import androidx.compose.ui.test.performScrollToNode
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
@@ -30,6 +34,7 @@ class BibleTest {
         openBible()
         rule.onNodeWithTag("bible-title").assertIsDisplayed()
         rule.onNodeWithText("Juan 3").assertIsDisplayed()
+        rule.onNodeWithTag("bible-list").performScrollToNode(hasTestTag("verse-16"))
         rule.onNodeWithText("Porque de tal manera amó Dios al mundo", substring = true).assertIsDisplayed()
         Shots.save(rule, "biblia-juan-3")
         rule.onNodeWithTag("bible-next").performClick()
@@ -62,7 +67,7 @@ class BibleTest {
         rule.onNodeWithTag("bible-panel").performClick()
         rule.waitForIdle()
         rule.onNodeWithTag("panel-tab-bookmarks").performClick()
-        rule.onNodeWithText("Juan 3").assertIsDisplayed()
+        rule.onNode(hasText("Juan 3") and hasAnyAncestor(hasTestTag("bible-drawer"))).assertIsDisplayed()
         Shots.save(rule, "biblia-panel-bookmarks")
     }
 }
