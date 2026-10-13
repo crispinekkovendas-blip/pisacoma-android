@@ -4,9 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import androidx.activity.compose.BackHandler
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -124,7 +121,7 @@ fun VideoPlayerScreen(videoId: String, modifier: Modifier, go: (Route) -> Unit) 
             )
             // tap layer: reveal / hide controls, double-tap sides to skip ±10 s
             Box(Modifier.fillMaxSize().clickable(interactionSource = remember { MutableInteractionSource() }, indication = null) { if (showCtrl) showCtrl = false else reveal() })
-            AnimatedVisibility(showCtrl, enter = fadeIn(), exit = fadeOut(), modifier = Modifier.fillMaxSize()) {
+            if (showCtrl) Box(Modifier.fillMaxSize()) {
                 Box(Modifier.fillMaxSize().background(Brush.verticalGradient(0f to Color(0x99000000), 0.4f to Color.Transparent, 0.7f to Color.Transparent, 1f to Color(0xCC000000)))) {
                     // top
                     Row(Modifier.fillMaxWidth().padding(10.dp), verticalAlignment = Alignment.CenterVertically) {

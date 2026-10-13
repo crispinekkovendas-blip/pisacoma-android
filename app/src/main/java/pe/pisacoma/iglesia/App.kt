@@ -13,7 +13,7 @@ import pe.pisacoma.iglesia.data.SearchRepository
 import pe.pisacoma.iglesia.data.prefs.UserState
 
 /** The app's single set of repositories, created once over the APK's assets. */
-class Repos(assets: AssetSource, val userState: UserState) {
+class Repos(val assets: AssetSource, val userState: UserState) {
     val hymns = HymnRepository(assets)
     val bible = BibleRepository(assets)
     val egw = EgwRepository(assets)
