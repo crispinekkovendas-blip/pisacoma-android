@@ -82,9 +82,11 @@ class HymnalTest {
         rule.onNodeWithTag("hymn-next").performScrollTo().performClick()
         rule.waitForIdle()
         rule.onNodeWithTag("hymn-number").assertTextEquals("2")
+        // the navigation transition keeps both hymn pages briefly: wait for exactly one «Proyectar»
+        rule.waitUntil(8_000) { rule.onAllNodes(hasTestTag("hymn-project")).fetchSemanticsNodes().size == 1 }
         rule.onNodeWithTag("hymn-project").performClick()
-        rule.waitForIdle()
-        rule.onNodeWithTag("projector").assertExists()
+        Shots.save(rule, "himno-proyectar-abriendo")
+        rule.waitUntil(8_000) { rule.onAllNodes(hasTestTag("projector")).fetchSemanticsNodes().isNotEmpty() }
         rule.onNodeWithTag("projector-stage").performClick() // cover → first stanza
         rule.waitForIdle()
         rule.onNodeWithText("ESTROFA 1").assertExists()
