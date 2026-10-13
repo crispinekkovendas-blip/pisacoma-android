@@ -28,7 +28,13 @@ class ContentStore(
 
     private fun file(path: String) = File(dir, path)
 
-    fun isStored(path: String): Boolean = file(path).isFile
+    /** On disk with the size the manifest expects — so a new APK's manifest makes changed files download again. */
+    fun isStored(path: String): Boolean {
+        val f = file(path)
+        if (!f.isFile) return false
+        val expected = manifest.byPath(path)?.bytes ?: return true
+        return f.length() == expected
+    }
 
     private fun storedFiles(): Sequence<File> = dir.walkTopDown().filter { it.isFile && !it.name.endsWith(".part") }
 
@@ -43,7 +49,7 @@ class ContentStore(
         if (bundled.exists(path)) return bundled.read(path)
         return withContext(Dispatchers.IO) {
             val f = file(path)
-            if (f.isFile) return@withContext f.readText(Charsets.UTF_8)
+            if (isStored(path)) return@withContext f.readText(Charsets.UTF_8)
             val bytes = fetchVerified(path, report = true)
             if (mode()?.persists != false) writeAtomic(f, bytes)
             String(bytes, Charsets.UTF_8)
@@ -57,7 +63,7 @@ class ContentStore(
     suspend fun download(path: String) {
         withContext(Dispatchers.IO) {
             val f = file(path)
-            if (f.isFile) return@withContext
+            if (isStored(path)) return@withContext
             writeAtomic(f, fetchVerified(path, report = false))
         }
     }
