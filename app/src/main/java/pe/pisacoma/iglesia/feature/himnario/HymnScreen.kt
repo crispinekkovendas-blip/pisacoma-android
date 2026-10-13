@@ -133,8 +133,7 @@ private fun HymnBody(h: Hymn, slides: List<ProjectorSlide>, hasNext: Boolean, mo
                             Text((b.stanzaNumber ?: (i + 1)).toString(), fontFamily = Fraunces, fontStyle = FontStyle.Italic, fontWeight = FontWeight.Bold, fontSize = 18.4.sp, color = Ochre.label, textAlign = TextAlign.End, modifier = Modifier.width(28.dp).padding(top = 4.dp))
                         }
                         Text(
-                            b.lines.joinToString("
-"),
+                            b.lines.joinToString("\n"),
                             fontFamily = Fraunces,
                             fontStyle = if (b.isChorus) FontStyle.Italic else FontStyle.Normal,
                             fontSize = 17.3.sp,

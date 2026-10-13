@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import pe.pisacoma.iglesia.R
 import pe.pisacoma.iglesia.audio.PlayerState
+import pe.pisacoma.iglesia.ui.chrome.Eyebrow
 import pe.pisacoma.iglesia.ui.theme.Inter
 import pe.pisacoma.iglesia.ui.theme.Tokens
 

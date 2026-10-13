@@ -50,7 +50,7 @@ fun YouTubeEmbed(videoId: String, modifier: Modifier = Modifier, autoplay: Boole
                                 if (autoplay) youTubePlayer.loadVideo(videoId, 0f) else youTubePlayer.cueVideo(videoId, 0f)
                             }
                         },
-                        IFramePlayerOptions.Builder().controls(1).rel(0).build(),
+                        IFramePlayerOptions.Builder(ctx).controls(1).rel(0).build(),
                     )
                 }
             },

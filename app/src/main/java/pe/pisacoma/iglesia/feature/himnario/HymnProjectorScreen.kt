@@ -4,8 +4,7 @@ import android.view.WindowManager
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -33,8 +32,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.PointerInputScope
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
@@ -149,8 +150,8 @@ fun HymnProjector(number: Int, title: String, bibleRef: String?, slides: List<Pr
     }
 }
 
-private suspend fun androidx.compose.ui.input.pointer.PointerInputScope.detectTapsLeftRight(onTap: (left: Boolean) -> Unit) {
-    androidx.compose.foundation.gestures.detectTapGestures { pos -> onTap(pos.x < size.width / 3f) }
+private suspend fun PointerInputScope.detectTapsLeftRight(onTap: (left: Boolean) -> Unit) {
+    detectTapGestures(onTap = { pos: Offset -> onTap(pos.x < size.width / 3f) })
 }
 
 @Composable
