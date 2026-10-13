@@ -30,7 +30,7 @@ class ChromeTest {
         rule.waitForIdle()
         rule.onNodeWithTag("menu-Himnario").performClick()
         rule.waitForIdle()
-        rule.onNodeWithTag("screen-/himnario").assertIsDisplayed()
+        rule.onNodeWithTag("hymn-list").assertIsDisplayed()
     }
 
     @Test

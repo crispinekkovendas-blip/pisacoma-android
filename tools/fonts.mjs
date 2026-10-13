@@ -20,6 +20,8 @@ const FONTS = {
   "inter-latin-ext.woff2": "inter_ext",
   "dm-sans-latin.woff2": "dm_sans",
   "dm-sans-latin-ext.woff2": "dm_sans_ext",
+  "playfair-display-latin.woff2": "playfair",
+  "playfair-display-latin-ext.woff2": "playfair_ext",
 };
 
 for (const [src, name] of Object.entries(FONTS)) {

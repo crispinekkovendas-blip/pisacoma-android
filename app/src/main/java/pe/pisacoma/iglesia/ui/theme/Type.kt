@@ -23,3 +23,6 @@ val Fraunces = FontFamily(
 val Inter = FontFamily(WEIGHTS.map { variable(pe.pisacoma.iglesia.R.font.inter, it) })
 
 val DmSans = FontFamily(WEIGHTS.map { variable(pe.pisacoma.iglesia.R.font.dm_sans, it) })
+
+/** The dark routes' heading face (site global.css h1–h3 and quiz-view.css): Playfair Display 700–800. */
+val Playfair = FontFamily(listOf(FontWeight.SemiBold, FontWeight.Bold, FontWeight.ExtraBold).map { variable(pe.pisacoma.iglesia.R.font.playfair, it) })

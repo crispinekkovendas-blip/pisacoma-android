@@ -106,7 +106,10 @@ fun ScreenFor(route: Route, modifier: Modifier, go: (Route) -> Unit) {
 
 @Composable
 fun PlaceholderScreen(route: Route, modifier: Modifier) {
-    Box(modifier.padding(24.dp).testTag("screen-${route.base}"), contentAlignment = Alignment.TopStart) {
-        Text(route.path, fontFamily = Fraunces, color = LocalChrome.current.bodyText)
+    androidx.compose.foundation.layout.Column(modifier.testTag("screen-${route.base}")) {
+        Box(Modifier.padding(24.dp).weight(1f), contentAlignment = Alignment.TopStart) {
+            Text(route.path, fontFamily = Fraunces, color = LocalChrome.current.bodyText)
+        }
+        pe.pisacoma.iglesia.ui.chrome.SiteFooter()
     }
 }

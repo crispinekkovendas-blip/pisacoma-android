@@ -33,7 +33,7 @@ import pe.pisacoma.iglesia.ui.theme.PisacomaTheme
 fun SiteScaffold(
     route: Route,
     onNavigate: (Route) -> Unit,
-    footer: Boolean = true,
+    footer: Boolean = false,
     content: @Composable (Modifier) -> Unit,
 ) {
     PisacomaTheme(route.skin) {
