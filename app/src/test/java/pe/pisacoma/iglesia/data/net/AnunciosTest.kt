@@ -7,13 +7,13 @@ import java.time.Instant
 
 /** Port of the site's utils/anuncios.ts: CSV → Anuncio, and the 21-day window selection. */
 class AnunciosTest {
-    private val csv = """
-        |titulo,fecha,hora,detalle,hasta
-        |Culto de jóvenes,2026-09-20,3:00 PM,"En el templo, con ""invitados""",
-        |Campaña,15/10/2026,,Toda la semana,22/10/2026
-        |Sin fecha,,,,
-        |Vigilia,2026-10-30,8:00 PM,,
-        |""".trimMargin()
+    private val csv = listOf(
+        "titulo,fecha,hora,detalle,hasta",
+        "Culto de jóvenes,2026-09-20,3:00 PM,\"En el templo, con \"\"invitados\"\"\",",
+        "Campaña,15/10/2026,,Toda la semana,22/10/2026",
+        "Sin fecha,,,,",
+        "Vigilia,2026-10-30,8:00 PM,,",
+    ).joinToString("\n")
 
     @Test fun parseCsvHandlesQuotesAndCrlf() {
         val rows = Anuncios.parseCsv("a,b\r\n\"x, y\",\"q\"\"q\"\n")

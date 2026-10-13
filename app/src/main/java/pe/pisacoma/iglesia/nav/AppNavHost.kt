@@ -16,6 +16,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import pe.pisacoma.iglesia.feature.biblia.BibleScreen
+import pe.pisacoma.iglesia.feature.buscar.SearchScreen
+import pe.pisacoma.iglesia.feature.diccionario.DictionaryScreen
+import pe.pisacoma.iglesia.feature.quien.WheelScreen
+import pe.pisacoma.iglesia.feature.visitanos.VisitanosScreen
 import pe.pisacoma.iglesia.feature.egw.EgwBookScreen
 import pe.pisacoma.iglesia.feature.egw.EgwCatalogScreen
 import pe.pisacoma.iglesia.feature.escuela.LessonScreen
@@ -104,6 +108,10 @@ fun ScreenFor(route: Route, modifier: Modifier, go: (Route) -> Unit) {
         is Route.EgwBook -> EgwBookScreen(route.slug, route.chapter, modifier, go)
         is Route.Quiz -> QuizIndexScreen(modifier, go)
         is Route.QuizPack -> QuizScreen(route.slug, modifier, go)
+        is Route.Quien -> WheelScreen(modifier, go)
+        is Route.Buscar -> SearchScreen(modifier, go)
+        is Route.Visitanos -> VisitanosScreen(modifier, go)
+        is Route.Diccionario -> DictionaryScreen(modifier, go)
         else -> PlaceholderScreen(route, modifier)
     }
 }
