@@ -14,6 +14,12 @@ class RoutesTest {
         assertEquals(Route.QuizPack("leccion-13-gracia-amor-comunion"), Route.parse("/quiz/leccion-13-gracia-amor-comunion"))
     }
 
+    @Test fun descargasIsAnAppOnlyPastelRoute() {
+        assertEquals(Route.Descargas, Route.parse("/descargas"))
+        assertEquals("/descargas", Route.Descargas.path)
+        assertEquals(pe.pisacoma.iglesia.ui.theme.Skin.Pastel, Route.Descargas.skin)
+    }
+
     @Test fun queryStringsFromTheSite() {
         assertEquals(Route.Biblia(43, 3, 16), Route.parse("/biblia/?libro=43&cap=3&v=16"))
         assertEquals(Route.Biblia(1, 1, null), Route.parse("/biblia/?libro=1&cap=1"))
