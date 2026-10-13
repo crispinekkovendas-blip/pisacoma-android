@@ -1,0 +1,16 @@
+# Gradle / Android build output
+.gradle/
+build/
+app/build/
+local.properties
+*.jks
+*.keystore
+.kotlin/
+# IDE
+.idea/
+*.iml
+.DS_Store
+# plan-execution scratch
+.superpowers/
+# tooling
+tools/node_modules/

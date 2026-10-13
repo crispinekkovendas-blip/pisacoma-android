@@ -1,0 +1,151 @@
+name: Build APK
+
+# Every push: unit tests and a debug APK signed with the shared key (when the secrets exist),
+# attached to the run as "pisacoma-<run>". A v* tag also builds the release APK and publishes it
+# as a GitHub Release. "Run workflow" by hand adds the emulator UI tests with screenshots.
+on:
+  push:
+    branches: ['**']
+    tags: ['v*']
+  workflow_dispatch:
+
+concurrency:
+  group: android-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Signing key
+        env:
+          SIGNING_KEYSTORE: ${{ secrets.SIGNING_KEYSTORE }}
+        run: |
+          if [ -n "$SIGNING_KEYSTORE" ]; then
+            echo "$SIGNING_KEYSTORE" | base64 -d > "$RUNNER_TEMP/shared.jks"
+            echo "SIGNING_KEYSTORE_PATH=$RUNNER_TEMP/shared.jks" >> "$GITHUB_ENV"
+          else
+            echo "no signing key secret: the APK is signed with a throwaway debug key"
+          fi
+
+      - name: Unit tests and APK
+        env:
+          SIGNING_STORE_PASSWORD: ${{ secrets.SIGNING_STORE_PASSWORD }}
+          SIGNING_KEY_ALIAS: ${{ secrets.SIGNING_KEY_ALIAS }}
+          SIGNING_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
+        run: |
+          chmod +x gradlew
+          ./gradlew --no-daemon testDebugUnitTest assembleDebug
+
+      - name: Test report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-report-${{ github.run_number }}
+          path: app/build/reports/tests/
+          if-no-files-found: ignore
+
+      - name: Name the APK
+        run: cp app/build/outputs/apk/debug/app-debug.apk "pisacoma-${{ github.run_number }}.apk"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pisacoma-${{ github.run_number }}
+          path: pisacoma-${{ github.run_number }}.apk
+
+  release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v4
+      - name: Signing key
+        env:
+          SIGNING_KEYSTORE: ${{ secrets.SIGNING_KEYSTORE }}
+        run: |
+          if [ -n "$SIGNING_KEYSTORE" ]; then
+            echo "$SIGNING_KEYSTORE" | base64 -d > "$RUNNER_TEMP/shared.jks"
+            echo "SIGNING_KEYSTORE_PATH=$RUNNER_TEMP/shared.jks" >> "$GITHUB_ENV"
+          fi
+      - name: Release APK
+        env:
+          SIGNING_STORE_PASSWORD: ${{ secrets.SIGNING_STORE_PASSWORD }}
+          SIGNING_KEY_ALIAS: ${{ secrets.SIGNING_KEY_ALIAS }}
+          SIGNING_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
+        run: |
+          chmod +x gradlew
+          ./gradlew --no-daemon assembleRelease
+          cp app/build/outputs/apk/release/app-release*.apk "pisacoma-${GITHUB_REF_NAME}.apk"
+      - name: GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "$GITHUB_REF_NAME" pisacoma-*.apk --title "Pisacoma $GITHUB_REF_NAME" --generate-notes
+
+  # On demand (Actions → Build APK → Run workflow): the Compose UI tests on an emulator, with
+  # screenshots pulled from the device. Slow (an emulator boots), so not on every push.
+  ui:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v4
+      - name: Free disk space (the emulator needs room for its userdata)
+        run: |
+          sudo rm -rf /usr/share/dotnet /opt/ghc /usr/local/share/boost /usr/local/lib/android/sdk/ndk /opt/hostedtoolcache/CodeQL "$AGENT_TOOLSDIRECTORY/PyPy" || true
+          df -h / | tail -1
+      - name: KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - name: Emulator run
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 33
+          target: google_apis
+          arch: x86_64
+          profile: pixel_6
+          disable-animations: true
+          disk-size: 2048M
+          ram-size: 3072M
+          script: |
+            chmod +x gradlew
+            ./gradlew --no-daemon connectedDebugAndroidTest -Pandroid.injected.androidTest.leaveApksInstalledAfterRun=true || echo "UI TESTS FAILED" > ui-failed.txt
+            mkdir -p shots
+            adb pull /sdcard/Android/data/pe.pisacoma.iglesia/files/shots shots || true
+            adb logcat -d -t 2000 > logcat.txt || true
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ui-${{ github.run_number }}
+          path: |
+            shots/
+            logcat.txt
+            ui-failed.txt
+            app/build/reports/androidTests/
+          if-no-files-found: ignore
+      - name: Fail when the UI test failed
+        run: test ! -f ui-failed.txt
