@@ -108,7 +108,7 @@ fun EgwBookScreen(slug: String, chapter: Int?, modifier: Modifier, go: (Route) -
         }
         Hairline(0.12f)
 
-        LazyColumn(Modifier.fillMaxSize(), state = list) {
+        LazyColumn(Modifier.fillMaxSize().testTag("egw-reader"), state = list) {
             item {
                 Column(Modifier.padding(horizontal = 20.dp)) {
                     Spacer(Modifier.height(26.dp))

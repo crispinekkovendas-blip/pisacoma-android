@@ -41,8 +41,9 @@ class BibleTest {
         rule.waitForIdle()
         rule.onNodeWithText("Juan 4").assertIsDisplayed()
         rule.onNodeWithTag("bible-prev").performClick()
+        rule.waitUntil(5_000) { rule.onAllNodes(hasText("Juan 3")).fetchSemanticsNodes().isNotEmpty() }
         rule.onNodeWithTag("bible-prev").performClick()
-        rule.waitForIdle()
+        rule.waitUntil(5_000) { rule.onAllNodes(hasText("Juan 2")).fetchSemanticsNodes().isNotEmpty() }
         rule.onNodeWithText("Juan 2").assertIsDisplayed()
     }
 

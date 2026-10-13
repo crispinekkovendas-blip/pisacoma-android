@@ -55,7 +55,8 @@ class EgwTest {
         rule.onNodeWithTag("chapter-2").performClick()
         rule.waitForIdle()
         rule.onNodeWithTag("egw-chapter-title").assertTextEquals("Capítulo 1— Amor supremo")
-        rule.onNodeWithTag("chapter-done").performScrollTo().performClick()
+        rule.onNodeWithTag("egw-reader").performScrollToNode(hasTestTag("chapter-done"))
+        rule.onNodeWithTag("chapter-done").performClick()
         rule.waitForIdle()
         rule.activityRule.scenario.onActivity { it.onBackPressedDispatcher.onBackPressed() }
         rule.waitForIdle()

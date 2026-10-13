@@ -158,10 +158,7 @@ fun WheelScreen(modifier: Modifier, go: (Route) -> Unit) {
                         // labels (native text, rotated into each segment like the site)
                         val paint = android.graphics.Paint().apply { color = android.graphics.Color.WHITE; isAntiAlias = true; textAlign = android.graphics.Paint.Align.CENTER; isFakeBoldText = true }
                         val n = names.size
-                        if (n == 1) {
-                            paint.textSize = 22.sp.toPx() * 0.75f
-                            drawContext.canvas.nativeCanvas.drawText(names[0], c.x, c.y + paint.textSize / 3, paint)
-                        } else if (n >= 2) {
+                        if (n >= 2) {
                             val seg = 360f / n
                             val fs = maxOf(9f, minOf(20f, 220f / n))
                             paint.textSize = fs.sp.toPx() * 0.75f
@@ -174,9 +171,6 @@ fun WheelScreen(modifier: Modifier, go: (Route) -> Unit) {
                                 val display = if (name.length > maxChars) name.take(maxChars - 1) + "…" else name
                                 rotate(mid + 90f, Offset(tx, ty)) { drawContext.canvas.nativeCanvas.drawText(display, tx, ty + paint.textSize / 3, paint) }
                             }
-                        } else {
-                            paint.color = android.graphics.Color.argb(115, 255, 255, 255); paint.textSize = 20.sp.toPx() * 0.75f
-                            drawContext.canvas.nativeCanvas.drawText("Agrega nombres", c.x, c.y + paint.textSize / 3, paint)
                         }
                     }
                     // external pointer at the top
@@ -184,8 +178,8 @@ fun WheelScreen(modifier: Modifier, go: (Route) -> Unit) {
                         val p = Path().apply { moveTo(size.width / 2, size.height); lineTo(4.dp.toPx(), 4.dp.toPx()); lineTo(size.width - 4.dp.toPx(), 4.dp.toPx()); close() }
                         drawPath(p, GOLD_LIGHT); drawPath(p, BG, style = Stroke(2.dp.toPx()))
                     }
-                    if (names.isEmpty()) Text("Agrega nombres", color = Color.Transparent, fontSize = 1.sp, modifier = Modifier.testTag("wheel-empty"))
-                    if (names.size == 1) Text(names[0], color = Color.Transparent, fontSize = 1.sp, modifier = Modifier.testTag("wheel-single"))
+                    if (names.isEmpty()) Text("Agrega nombres", fontFamily = Inter, fontWeight = FontWeight.SemiBold, fontSize = 20.sp, color = Color(0x73FFFFFF), modifier = Modifier.align(Alignment.Center).testTag("wheel-empty"))
+                    if (names.size == 1) Text(names[0], fontFamily = Inter, fontWeight = FontWeight.Bold, fontSize = 22.sp, color = Color.White, modifier = Modifier.align(Alignment.Center).testTag("wheel-single"))
                 }
                 Spacer(Modifier.height(18.dp))
                 Box(

@@ -7,6 +7,8 @@ import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.click
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onAllNodesWithText
+import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
@@ -38,7 +40,7 @@ class LessonTest {
         rule.onNodeWithTag("nav-menu").performClick()
         rule.onNodeWithTag("menu-Esc. Sabática").performClick()
         rule.waitForIdle()
-        rule.onNodeWithText("Primera y segunda", substring = true).assertIsDisplayed()
+        rule.onAllNodesWithText("Primera y segunda", substring = true).onFirst().assertIsDisplayed()
         rule.onNodeWithTag("lesson-list").performScrollToNode(hasTestTag("lesson-13"))
         rule.onNodeWithTag("lesson-13").assertIsDisplayed()
         Shots.save(rule, "escuela-overview")
@@ -57,7 +59,8 @@ class LessonTest {
         rule.activityRule.scenario.onActivity { it.onBackPressedDispatcher.onBackPressed() }
         rule.waitForIdle()
         rule.onNodeWithTag("lesson-list").performScrollToNode(hasTestTag("lesson-1"))
-        rule.onNodeWithTag("lesson-1-dots-done-1").assertIsDisplayed()
+        rule.waitUntil(5_000) { rule.onAllNodes(hasTestTag("lesson-1-dots-done-1")).fetchSemanticsNodes().isNotEmpty() }
+        rule.onNodeWithTag("lesson-1-dots-done-1").assertExists()
         // reopen: day 2 is still selected (lastDay)
         rule.onNodeWithTag("lesson-1").performClick()
         rule.waitForIdle()

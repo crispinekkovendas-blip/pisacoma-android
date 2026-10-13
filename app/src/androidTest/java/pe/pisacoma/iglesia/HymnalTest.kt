@@ -88,7 +88,7 @@ class HymnalTest {
         rule.onNodeWithText("ESTROFA 1").assertExists()
         Shots.save(rule, "himno-proyectar")
         rule.onNodeWithTag("projector-close").performClick()
-        rule.waitForIdle()
+        rule.waitUntil(5_000) { rule.onAllNodes(hasTestTag("projector")).fetchSemanticsNodes().isEmpty() }
         rule.onNodeWithTag("hymn-number").assertExists()
     }
 
