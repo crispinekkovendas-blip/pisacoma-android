@@ -27,6 +27,7 @@ import pe.pisacoma.iglesia.feature.egw.EgwCatalogScreen
 import pe.pisacoma.iglesia.feature.escuela.LessonScreen
 import pe.pisacoma.iglesia.feature.escuela.QuarterScreen
 import pe.pisacoma.iglesia.feature.himnario.HymnScreen
+import pe.pisacoma.iglesia.feature.home.HomeScreen
 import pe.pisacoma.iglesia.feature.quiz.QuizIndexScreen
 import pe.pisacoma.iglesia.feature.quiz.QuizScreen
 import pe.pisacoma.iglesia.feature.himnario.HymnalIndexScreen
@@ -101,6 +102,7 @@ private fun NavGraphBuilder.screen(
 @Composable
 fun ScreenFor(route: Route, modifier: Modifier, go: (Route) -> Unit) {
     when (route) {
+        is Route.Home -> HomeScreen(modifier, go)
         is Route.Himnario -> HymnalIndexScreen(modifier, go)
         is Route.Hymn -> HymnScreen(route.variant, route.number, modifier, go)
         is Route.Escuela -> QuarterScreen(modifier, go)
