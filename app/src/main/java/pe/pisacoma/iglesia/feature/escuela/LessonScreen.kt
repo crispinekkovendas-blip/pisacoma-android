@@ -192,8 +192,8 @@ fun LessonScreen(number: Int, day: Int?, modifier: Modifier, go: (Route) -> Unit
                         text = "Escuela Sabática · Lección ${lesson.number}: ${lesson.title} · ${DAY_LABELS[s.activeDay]}" + (if (s.activeDay > 0 && current.title.isNotEmpty()) ": ${current.title}" else ""),
                         path = "/escuela-sabatica/${lesson.number}/?dia=${s.activeDay}",
                     )
-                    if (s.quizSlug != null) {
-                        Box(Modifier.clip(CircleShape).background(Tokens.forest).pressable(scale = 0.97f) { go(Route.QuizPack(s.quizSlug)) }.padding(horizontal = 16.dp, vertical = 9.dp).testTag("lesson-quiz")) {
+                    s.quizSlug?.let { slug ->
+                        Box(Modifier.clip(CircleShape).background(Tokens.forest).pressable(scale = 0.97f) { go(Route.QuizPack(slug)) }.padding(horizontal = 16.dp, vertical = 9.dp).testTag("lesson-quiz")) {
                             Text("Quiz de la lección", fontFamily = Inter, fontWeight = FontWeight.Medium, fontSize = 14.4.sp, color = Tokens.cream)
                         }
                     }
@@ -241,7 +241,7 @@ fun LessonScreen(number: Int, day: Int?, modifier: Modifier, go: (Route) -> Unit
                         Text(current.title.ifEmpty { DAY_LABELS[s.activeDay] }, fontFamily = Fraunces, fontWeight = FontWeight.SemiBold, fontSize = 20.sp, color = Tokens.inkDeep)
                         Spacer(Modifier.height(4.dp))
                         Text(
-                            when { s.savedAt != null -> "Guardado ${relativeTimeEs(s.savedAt)}"; s.notes.isNotEmpty() -> "Tus apuntes anteriores"; else -> "Empieza a escribir — guardamos automáticamente" },
+                            run { val saved = s.savedAt; when { saved != null -> "Guardado ${relativeTimeEs(saved)}"; s.notes.isNotEmpty() -> "Tus apuntes anteriores"; else -> "Empieza a escribir — guardamos automáticamente" } },
                             fontFamily = Inter, fontSize = 12.sp, color = Tokens.sageText,
                         )
                         Spacer(Modifier.height(12.dp))
