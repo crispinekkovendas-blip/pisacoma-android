@@ -1,6 +1,7 @@
 package pe.pisacoma.iglesia
 
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
@@ -27,6 +28,8 @@ class WheelTest {
         openWheel()
         rule.onNodeWithTag("wheel-clear").performClick()
         rule.waitForIdle()
+        Shots.save(rule, "quien-vacia")
+        rule.waitUntil(5_000) { rule.onAllNodes(hasTestTag("wheel-empty")).fetchSemanticsNodes().isNotEmpty() }
         rule.onNodeWithTag("wheel-empty").assertExists()
         rule.onNodeWithTag("wheel-input").performTextInput("Ana, Luis")
         rule.onNodeWithTag("wheel-add").performClick()

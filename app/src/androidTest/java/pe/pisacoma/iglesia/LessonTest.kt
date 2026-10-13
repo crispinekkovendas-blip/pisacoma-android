@@ -59,6 +59,7 @@ class LessonTest {
         rule.activityRule.scenario.onActivity { it.onBackPressedDispatcher.onBackPressed() }
         rule.waitForIdle()
         rule.onNodeWithTag("lesson-list").performScrollToNode(hasTestTag("lesson-1"))
+        Shots.save(rule, "escuela-overview-tras-dia")
         rule.waitUntil(5_000) { rule.onAllNodes(hasTestTag("lesson-1-dots-done-1")).fetchSemanticsNodes().isNotEmpty() }
         rule.onNodeWithTag("lesson-1-dots-done-1").assertExists()
         // reopen: day 2 is still selected (lastDay)

@@ -38,6 +38,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
@@ -86,20 +88,20 @@ fun EgwBookScreen(slug: String, chapter: Int?, modifier: Modifier, go: (Route) -
 
     Column(modifier.fillMaxSize()) {
         // ======= toolbar =======
-        Row(Modifier.fillMaxWidth().background(Color(0xF2F7F4E6)).padding(horizontal = 12.dp, vertical = 8.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        Row(Modifier.fillMaxWidth().background(Color(0xF2F7F4E6)).padding(horizontal = 10.dp, vertical = 8.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(5.dp)) {
             ToolbarIcon(R.drawable.ic_chapters, "Capítulos", testTag = "egw-chapters", onClick = { toc = true })
-            Box(Modifier.clip(CircleShape).pressable(scale = 0.97f) { go(Route.Egw) }.padding(8.dp)) {
-                Icon(painterResource(R.drawable.ic_back), "Volver al catálogo", tint = Tokens.sage, modifier = Modifier.size(14.dp))
+            Box(Modifier.size(32.dp).clip(CircleShape).pressable(scale = 0.97f) { go(Route.Egw) }.semantics { contentDescription = "Volver al catálogo" }, contentAlignment = Alignment.Center) {
+                Icon(painterResource(R.drawable.ic_back), null, tint = Tokens.sage, modifier = Modifier.size(14.dp))
             }
-            Row(Modifier.weight(1f), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                Box(Modifier.clip(RoundedCornerShape(6.dp)).background(accent).padding(horizontal = 6.dp, vertical = 3.dp)) {
-                    Text(meta.id, fontFamily = Inter, fontWeight = FontWeight.Bold, fontSize = 10.sp, letterSpacing = 0.8.sp, color = Tokens.cream)
+            Column(Modifier.weight(1f)) {
+                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(5.dp)) {
+                    Box(Modifier.clip(RoundedCornerShape(5.dp)).background(accent).padding(horizontal = 5.dp, vertical = 2.dp)) {
+                        Text(meta.id, fontFamily = Inter, fontWeight = FontWeight.Bold, fontSize = 9.5.sp, letterSpacing = 0.6.sp, color = Tokens.cream, maxLines = 1, softWrap = false)
+                    }
+                    Text("${cur.number}/${s.total}", fontFamily = Inter, fontSize = 11.sp, fontWeight = FontWeight.SemiBold, color = Tokens.sageText, maxLines = 1, softWrap = false)
                 }
-                Text("Cap. ${cur.number} / ${s.total}", fontFamily = Inter, fontSize = 11.sp, fontWeight = FontWeight.SemiBold, color = Tokens.sageText)
-            }
-            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                Box(Modifier.width(40.dp).height(4.dp).clip(CircleShape).background(Tokens.sageA(0.14f))) { Box(Modifier.fillMaxWidth(s.pct / 100f).height(4.dp).clip(CircleShape).background(accent)) }
-                Text("${s.pct}%", fontFamily = Inter, fontSize = 10.5.sp, fontWeight = FontWeight.Bold, color = Tokens.sageText)
+                Spacer(Modifier.height(4.dp))
+                Box(Modifier.fillMaxWidth().height(3.dp).clip(CircleShape).background(Tokens.sageA(0.14f))) { Box(Modifier.fillMaxWidth(s.pct / 100f).height(3.dp).clip(CircleShape).background(accent)) }
             }
             ToolbarIcon(R.drawable.ic_check, if (s.isDone) "Marcar como no leído" else "Marcar como completado", active = s.isDone, testTag = "chapter-done-top", onClick = vm::toggleDone)
             ToolbarIcon(R.drawable.ic_bookmark, if (s.isBookmarked) "Quitar marcador" else "Agregar marcador", active = s.isBookmarked, testTag = "egw-bookmark", onClick = vm::toggleBookmark)

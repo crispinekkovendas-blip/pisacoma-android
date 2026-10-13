@@ -35,6 +35,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
@@ -81,25 +84,19 @@ fun LessonScreen(number: Int, day: Int?, modifier: Modifier, go: (Route) -> Unit
     Column(modifier.fillMaxSize()) {
         // ======= sticky toolbar (.toolbar) =======
         Row(
-            Modifier.fillMaxWidth().background(Color(0xF2F7F4E6)).padding(horizontal = 12.dp, vertical = 8.dp),
+            Modifier.fillMaxWidth().background(Color(0xF2F7F4E6)).padding(horizontal = 10.dp, vertical = 8.dp),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            horizontalArrangement = Arrangement.spacedBy(5.dp),
         ) {
-            Row(Modifier.clip(CircleShape).pressable(scale = 0.97f) { go(Route.Escuela) }.padding(horizontal = 8.dp, vertical = 6.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                Icon(painterResource(R.drawable.ic_back), "Volver a las lecciones", tint = Tokens.sage, modifier = Modifier.size(14.dp))
-                Text("Lecciones", fontFamily = Inter, fontWeight = FontWeight.SemiBold, fontSize = 12.sp, color = Tokens.sage)
+            Box(Modifier.size(32.dp).clip(CircleShape).pressable(scale = 0.97f) { go(Route.Escuela) }.semantics { contentDescription = "Volver a las lecciones" }, contentAlignment = Alignment.Center) {
+                Icon(painterResource(R.drawable.ic_back), null, tint = Tokens.sage, modifier = Modifier.size(14.dp))
             }
-            Row(Modifier.weight(1f), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                Text("Lec. ${lesson.number}", fontFamily = Fraunces, fontStyle = FontStyle.Italic, fontWeight = FontWeight.Bold, fontSize = 13.sp, color = Tokens.forest)
-                Text("·", color = Tokens.sageText)
-                Text("Día ${s.activeDay + 1}", fontFamily = Inter, fontSize = 11.sp, fontWeight = FontWeight.SemiBold, letterSpacing = 1.2.sp, color = Tokens.sageText)
-            }
-            // progress pill
-            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                Box(Modifier.width(44.dp).height(4.dp).clip(CircleShape).background(Tokens.sageA(0.14f))) {
-                    Box(Modifier.fillMaxWidth(s.pct / 100f).height(4.dp).clip(CircleShape).background(Tokens.sage))
+            Column(Modifier.weight(1f)) {
+                Text("Lec. ${lesson.number} · Día ${s.activeDay + 1}", fontFamily = Fraunces, fontStyle = FontStyle.Italic, fontWeight = FontWeight.Bold, fontSize = 12.5.sp, color = Tokens.forest, maxLines = 1, softWrap = false, overflow = TextOverflow.Clip)
+                Spacer(Modifier.height(4.dp))
+                Box(Modifier.fillMaxWidth().height(3.dp).clip(CircleShape).background(Tokens.sageA(0.14f))) {
+                    Box(Modifier.fillMaxWidth(s.pct / 100f).height(3.dp).clip(CircleShape).background(Tokens.sage))
                 }
-                Text("${s.pct}%", fontFamily = Inter, fontSize = 10.5.sp, fontWeight = FontWeight.Bold, color = Tokens.sageText)
             }
             ToolbarIcon(R.drawable.ic_check, if (s.isDone) "Marcar día como no leído" else "Marcar día como completado", active = s.isDone, testTag = "day-done", onClick = vm::toggleDone)
             ToolbarIcon(R.drawable.ic_bookmark, if (s.isBookmarked) "Quitar marcador" else "Agregar marcador", active = s.isBookmarked, testTag = "lesson-bookmark", onClick = vm::toggleBookmark)

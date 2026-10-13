@@ -41,7 +41,10 @@ class EgwCatalogViewModel(private val egw: EgwRepository, private val userState:
     private val _state = MutableStateFlow(CatalogUi())
     val state: StateFlow<CatalogUi> = _state
 
-    init { refresh() }
+    init {
+        refresh()
+        viewModelScope.launch { userState.changes().collect { key -> if (key.startsWith("egw:")) refresh() } }
+    }
 
     fun refresh() = viewModelScope.launch {
         val rails = egw.rails()

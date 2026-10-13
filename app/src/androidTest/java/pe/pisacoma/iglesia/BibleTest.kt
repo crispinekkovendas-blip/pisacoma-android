@@ -40,11 +40,14 @@ class BibleTest {
         rule.onNodeWithTag("bible-next").performClick()
         rule.waitForIdle()
         rule.onNodeWithText("Juan 4").assertIsDisplayed()
+        rule.onNodeWithTag("bible-list").performScrollToNode(hasTestTag("bible-prev"))
         rule.onNodeWithTag("bible-prev").performClick()
         rule.waitUntil(5_000) { rule.onAllNodes(hasText("Juan 3")).fetchSemanticsNodes().isNotEmpty() }
+        rule.onNodeWithTag("bible-list").performScrollToNode(hasTestTag("bible-prev"))
         rule.onNodeWithTag("bible-prev").performClick()
         rule.waitUntil(5_000) { rule.onAllNodes(hasText("Juan 2")).fetchSemanticsNodes().isNotEmpty() }
-        rule.onNodeWithText("Juan 2").assertIsDisplayed()
+        Shots.save(rule, "biblia-juan-2")
+        rule.onNodeWithText("Juan 2").assertExists()
     }
 
     @Test

@@ -34,7 +34,7 @@ object TextScale {
     fun larger(s: Float) = minOf(MAX, s + STEP)
 }
 
-/** A 38 dp toolbar button (`.tb-icon`): sage outline, pressed/active fill. */
+/** A 32 dp toolbar button (`.tb-icon`, 38 px on the site; 32 dp so six fit a 360 dp phone): sage outline, pressed/active fill. */
 @Composable
 fun ToolbarIcon(
     iconRes: Int? = null,
@@ -47,7 +47,7 @@ fun ToolbarIcon(
     val shape = RoundedCornerShape(10.dp)
     Box(
         Modifier
-            .size(38.dp)
+            .size(32.dp)
             .clip(shape)
             .background(if (active) Tokens.forest else Tokens.sageA(0.06f))
             .border(1.dp, if (active) Tokens.forest else Tokens.sageA(0.20f), shape)
@@ -57,7 +57,7 @@ fun ToolbarIcon(
         contentAlignment = Alignment.Center,
     ) {
         if (content != null) content()
-        else if (iconRes != null) Icon(painterResource(iconRes), null, tint = if (active) Tokens.cream else Tokens.forest, modifier = Modifier.size(16.dp))
+        else if (iconRes != null) Icon(painterResource(iconRes), null, tint = if (active) Tokens.cream else Tokens.forest, modifier = Modifier.size(15.dp))
     }
 }
 

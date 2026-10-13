@@ -89,7 +89,9 @@ class HymnalTest {
         Shots.save(rule, "himno-proyectar")
         rule.onNodeWithTag("projector-close").performClick()
         rule.waitUntil(5_000) { rule.onAllNodes(hasTestTag("projector")).fetchSemanticsNodes().isEmpty() }
-        rule.onNodeWithTag("hymn-number").assertExists()
+        Shots.save(rule, "himno-tras-proyectar")
+        rule.waitUntil(5_000) { rule.onAllNodes(hasTestTag("hymn-lyrics")).fetchSemanticsNodes().isNotEmpty() }
+        rule.onNodeWithTag("hymn-lyrics").assertExists()
     }
 
     @Test

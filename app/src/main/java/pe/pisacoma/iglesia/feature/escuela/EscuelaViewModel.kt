@@ -43,7 +43,10 @@ class QuarterViewModel(private val repo: QuarterlyRepository, private val userSt
     private val _state = MutableStateFlow(QuarterUi())
     val state: StateFlow<QuarterUi> = _state
 
-    init { refresh() }
+    init {
+        refresh()
+        viewModelScope.launch { userState.changes().collect { key -> if (key.startsWith("escuela:")) refresh() } }
+    }
 
     fun refresh() = viewModelScope.launch {
         val q = repo.quarterly()
