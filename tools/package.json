@@ -1,0 +1,8 @@
+{
+  "name": "pisacoma-android-tools",
+  "private": true,
+  "type": "module",
+  "description": "Copies the site content into app/src/main/assets and converts fonts",
+  "scripts": { "sync": "node sync-content.mjs", "fonts": "node fonts.mjs" },
+  "dependencies": { "tsx": "4.20.5", "wawoff2": "2.0.1" }
+}
