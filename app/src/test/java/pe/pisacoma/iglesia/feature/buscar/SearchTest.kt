@@ -23,8 +23,9 @@ class SearchTest {
         assertEquals(100, Search.scoreTitle(q, tokens, "Santo"))
         assertEquals(60, Search.scoreTitle(q, tokens, "Santo, santo, santo"))
         assertEquals(0, Search.scoreTitle(q, tokens, "Cantad alegres"))
-        // word hit 12 + short-title bonus (6 − floor(len/12))
-        assertEquals(12 + 5, Search.scoreTitle(q, tokens, "Dios santo"))
+        // word hit 12 + short-title bonus (6 − floor(len/12)); "dios santo" is 10 chars → +6
+        assertEquals(12 + 6, Search.scoreTitle(q, tokens, "Dios santo"))
+        assertEquals(12 + 4, Search.scoreTitle(q, tokens, "Santo es el Señor de los ejércitos"))
     }
 
     @Test fun explicitReferenceScores200() {
@@ -71,8 +72,12 @@ class SearchTest {
     @Test fun hymnTitleAndLyricLine() {
         val g = Search.search(index, "santo santo santo")
         assertTrue(g.hymns.isNotEmpty())
-        assertTrue(g.hymns.first().title.lowercase().startsWith("santo"))
-        assertEquals("Himnario Adventista · Español", g.hymns.first().caption)
+        // the old Portuguese «Santo, santo, santo» is an exact title (100) and ranks first; ES 61 starts with it (60 + 1)
+        assertEquals(100, g.hymns.first().score)
+        assertEquals("Hinário Antigo · Português", g.hymns.first().caption)
+        val es61 = g.hymns.first { it.href == "/himnario/es/61/" }
+        assertEquals(61, es61.score)
+        assertEquals("Himnario Adventista · Español", es61.caption)
     }
 
     @Test fun egwBookTitleGetsTheBonus() {
