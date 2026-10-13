@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- site .hamburger: three 1.6px lines, the middle one shorter and right-aligned -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="24dp" android:height="24dp" android:viewportWidth="24" android:viewportHeight="24">
+    <path android:pathData="M2 6.5h20" android:strokeColor="#000000" android:strokeWidth="1.6" android:strokeLineCap="round" android:fillColor="#00000000" />
+    <path android:pathData="M8 12h14" android:strokeColor="#000000" android:strokeWidth="1.6" android:strokeLineCap="round" android:fillColor="#00000000" />
+    <path android:pathData="M2 17.5h20" android:strokeColor="#000000" android:strokeWidth="1.6" android:strokeLineCap="round" android:fillColor="#00000000" />
+</vector>

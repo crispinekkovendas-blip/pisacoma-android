@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- site NavIcon "cross" (quiz-qwik/src/routes/layout.tsx), 24px stroke icon; tinted by the caller -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="24dp" android:height="24dp" android:viewportWidth="24" android:viewportHeight="24">
+    <path android:pathData="M6.1 3h11.8a1.6 1.6 0 0 1 1.6 1.6v14.8a1.6 1.6 0 0 1 -1.6 1.6h-11.8a1.6 1.6 0 0 1 -1.6 -1.6v-14.8a1.6 1.6 0 0 1 1.6 -1.6z" android:strokeColor="#000000" android:strokeWidth="1.6" android:strokeLineCap="round" android:strokeLineJoin="round" android:fillColor="#00000000" />
+    <path android:pathData="M12 8v8M8 12h8" android:strokeColor="#000000" android:strokeWidth="1.7" android:strokeLineCap="round" android:strokeLineJoin="round" android:fillColor="#00000000" />
+</vector>
