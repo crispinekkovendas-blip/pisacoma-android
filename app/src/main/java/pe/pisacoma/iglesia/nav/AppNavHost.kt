@@ -15,6 +15,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import pe.pisacoma.iglesia.feature.himnario.HymnalIndexScreen
 import pe.pisacoma.iglesia.ui.chrome.SiteScaffold
 import pe.pisacoma.iglesia.ui.theme.LocalChrome
 import pe.pisacoma.iglesia.ui.theme.Fraunces
@@ -85,7 +86,10 @@ private fun NavGraphBuilder.screen(
 /** Dispatches a route to its screen. Screens are added task by task; the rest are placeholders. */
 @Composable
 fun ScreenFor(route: Route, modifier: Modifier, go: (Route) -> Unit) {
-    PlaceholderScreen(route, modifier)
+    when (route) {
+        is Route.Himnario -> HymnalIndexScreen(modifier, go)
+        else -> PlaceholderScreen(route, modifier)
+    }
 }
 
 @Composable
