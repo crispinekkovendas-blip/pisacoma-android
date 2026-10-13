@@ -54,6 +54,13 @@ class ContentStoreTest {
         assertEquals("data/x.json", s.missing.value)
     }
 
+    @Test fun backgroundDownloadFailureDoesNotRaiseTheNotice() = runBlocking {
+        offline = true
+        val s = store()
+        try { s.download("data/x.json"); fail("expected IOException") } catch (e: IOException) {}
+        assertEquals(null, s.missing.value)
+    }
+
     @Test fun offlineStoredStillReads() = runBlocking {
         val s = store()
         s.read("data/x.json")

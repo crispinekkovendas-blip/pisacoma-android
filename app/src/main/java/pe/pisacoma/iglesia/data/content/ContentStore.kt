@@ -44,18 +44,21 @@ class ContentStore(
         return withContext(Dispatchers.IO) {
             val f = file(path)
             if (f.isFile) return@withContext f.readText(Charsets.UTF_8)
-            val bytes = fetchVerified(path)
+            val bytes = fetchVerified(path, report = true)
             if (mode()?.persists != false) writeAtomic(f, bytes)
             String(bytes, Charsets.UTF_8)
         }
     }
 
-    /** Saves one file for later; a no-op when it is already stored. Throws on network trouble. */
+    /**
+     * Saves one file for later; a no-op when it is already stored. Throws on network trouble
+     * without raising the notice: a background download failing is not the reader's problem.
+     */
     suspend fun download(path: String) {
         withContext(Dispatchers.IO) {
             val f = file(path)
             if (f.isFile) return@withContext
-            writeAtomic(f, fetchVerified(path))
+            writeAtomic(f, fetchVerified(path, report = false))
         }
     }
 
@@ -64,11 +67,11 @@ class ContentStore(
         dir.deleteRecursively()
     }
 
-    private suspend fun fetchVerified(path: String): ByteArray {
+    private suspend fun fetchVerified(path: String, report: Boolean): ByteArray {
         val bytes = try {
             fetch(path)
         } catch (e: IOException) {
-            missing.value = path
+            if (report) missing.value = path
             throw ContentMissing(path)
         }
         val expected = manifest.byPath(path)?.bytes
