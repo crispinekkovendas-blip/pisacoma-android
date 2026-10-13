@@ -61,6 +61,14 @@ function copy(relSite, rel, pack = null) {
   const target = join(root, rel);
   mkdirSync(dirname(target), { recursive: true });
   cpSync(src, target, { recursive: true });
+  // Text files get LF endings so the byte counts in the manifest are the bytes the app downloads
+  // (git stores content/ verbatim: see .gitattributes) whatever box ran this script.
+  const list = statSync(target).isDirectory() ? listFiles(target) : [target];
+  for (const p of list) {
+    if (!/\.(json|txt)$/.test(p)) continue;
+    const text = readFileSync(p, "utf8");
+    if (text.includes("\r")) writeFileSync(p, text.replace(/\r\n?/g, "\n"));
+  }
   record(root, target, pack);
 }
 const json = (v) => JSON.stringify(v);

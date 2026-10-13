@@ -6,3 +6,5 @@ gradlew text eol=lf
 *.jpg binary
 *.png binary
 *.ttf binary
+content/** -text
+app/src/main/assets/** -text

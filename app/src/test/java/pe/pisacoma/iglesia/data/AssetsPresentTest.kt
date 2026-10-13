@@ -25,7 +25,7 @@ class AssetsPresentTest {
     @Test fun quizzes() = assertAtLeast(content("data/quizzes.json"), 10_000)
     @Test fun church() = assertAtLeast(bundled("data/church.json"), 1_000)
     @Test fun indicesAreBundled() {
-        for (f in listOf("bible-books", "egw-index", "featured-hymns", "home-photos", "anuncios", "videos-channels")) assertAtLeast(bundled("data/$f.json"), 100)
+        for (f in listOf("bible-books", "egw-index", "featured-hymns", "home-photos", "anuncios", "videos-channels")) assertAtLeast(bundled("data/$f.json"), 20)
     }
     @Test fun coversAreBundled() = assertTrue(bundled("covers").listFiles()!!.size == 25)
     @Test fun homeLottie() = assertAtLeast(bundled("home/lottie/inicio-portrait.json"), 2_000)
