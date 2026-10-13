@@ -126,7 +126,7 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 33
-          target: google_apis
+          target: default
           arch: x86_64
           profile: pixel_6
           disable-animations: true
@@ -134,6 +134,9 @@ jobs:
           ram-size: 3072M
           script: |
             chmod +x gradlew
+            adb shell settings put global window_animation_scale 0 || true
+            adb shell settings put secure anr_show_background 0 || true
+            adb shell am broadcast -a android.intent.action.CLOSE_SYSTEM_DIALOGS || true
             ./gradlew --no-daemon connectedDebugAndroidTest -Pandroid.injected.androidTest.leaveApksInstalledAfterRun=true || echo "UI TESTS FAILED" > ui-failed.txt
             mkdir -p shots
             adb pull /sdcard/Android/data/pe.pisacoma.iglesia/files/shots shots || true
